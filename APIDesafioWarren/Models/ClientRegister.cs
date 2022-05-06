@@ -6,7 +6,7 @@
 
         public ClientRegister() { }
 
-        public ClientRegister(int id, string fullname, string email, string emailconfirmation, string cpf, string cellphone, DateTime birthdate, bool emailSms, bool Whatsapp, string country, string city, string postalcode, string address, string number)
+        public ClientRegister(int id, string fullname, string email, string emailconfirmation, string cpf, string cellphone, DateTime birthdate, bool emailSms, bool Whatsapp, string country, string city, string postalcode, string address, int number)
         {
             this.Id = id;
             this.fullName = fullName;
@@ -37,7 +37,7 @@
         public string city { get; set; }
         public string postalCode{ get; set; }
         public string  address { get; set; }
-        public string  number { get; set; }
+        public int  number { get; set; }
 
     }
 }

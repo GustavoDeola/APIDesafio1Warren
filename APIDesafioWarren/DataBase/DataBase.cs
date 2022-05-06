@@ -23,7 +23,7 @@ namespace APIDesafioWarren.DataBase
                 city = "Blumenau",
                 postalCode = "5456775342",
                 address = "Rua Paraguai Gonçalves",
-                number = "250"
+                number = 250
             }
         };
         public List<ClientRegister> showRegisters { get; set; } = new List<ClientRegister>()
@@ -42,7 +42,7 @@ namespace APIDesafioWarren.DataBase
                 city = "Blumenau",
                 postalCode = "5456775342",
                 address = "Rua Paraguai Gonçalves",
-                number = "250"
+                number = 250
             }
         };
             
