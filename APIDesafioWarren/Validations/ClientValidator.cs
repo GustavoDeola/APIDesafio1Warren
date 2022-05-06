@@ -39,7 +39,8 @@ namespace APIDesafioWarren.Validations
                 .WithMessage("Please complete this field")
                 .Must(v => v.validCpf())
                 .WithMessage("Invalid CPF")
-                .Length(14);
+                .Length(14)
+                .WithMessage("CPF must have to contain 14 characters");
 
             RuleFor(c => c.cellphone)
                 .NotEmpty()
