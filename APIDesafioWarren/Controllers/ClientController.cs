@@ -182,7 +182,7 @@ namespace APIDesafioWarren.Controllers
 
         [HttpGet("Bynumber/{number}")]
 
-        public IActionResult GetBynumber(string number)
+        public IActionResult GetBynumber(int number)
         {
             var client = _dataBase.Registers.FindAll(c => c.number == number);
             if (client.Capacity == 0)
