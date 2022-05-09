@@ -37,7 +37,7 @@
         public string city { get; set; }
         public string postalCode{ get; set; }
         public string  address { get; set; }
-        public int  number { get; set; }
+        public int number { get; set; }
 
     }
 }
