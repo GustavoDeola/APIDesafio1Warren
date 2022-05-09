@@ -65,7 +65,9 @@ namespace APIDesafioWarren.Validations
                 .NotEmpty()
                 .WithMessage("Please complete this field")
                 .MinimumLength(3)
-                .WithMessage("The city name is too short please enter at least 3 characters");
+                .WithMessage("The city name is too short please enter at least 3 characters")
+                .MaximumLength(40)
+                .WithMessage("The City informed surpasses the limit off characters");
 
             RuleFor(c => c.postalCode)
                 .NotEmpty()
