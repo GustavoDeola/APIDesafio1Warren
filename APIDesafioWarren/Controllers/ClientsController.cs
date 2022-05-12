@@ -1,22 +1,21 @@
 ﻿using APIDesafioWarren.DataBase;
 using APIDesafioWarren.Models;
 using APIDesafioWarren.Validations;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APIDesafioWarren.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClientController : ControllerBase
+    public class ClientsController : ControllerBase
     {
         public readonly IDataBase _dataBase;
 
-        public ClientController(IDataBase database)
+        public ClientsController(IDataBase database)
         {
             _dataBase = database;
         }
-        
+
         [HttpGet]
 
         public IActionResult Get()
@@ -28,25 +27,27 @@ namespace APIDesafioWarren.Controllers
 
         public IActionResult GetById(int id)
         {
+            return SafeAction(() =>
+            {
+                var client = _dataBase.Registers.Find(x => x.Id.Equals(id));
 
-            var client = _dataBase.Registers.FindAll(c => c.Id == id);
-            
-            if (client.Capacity == 0) return NotFound("Client not found!"); 
+                if (client is null) return NotFound($"Client not found! for id: {id}");
 
-            return Ok(client);
-
-
+                return Ok(client);
+            });
         }
 
         [HttpGet("Byfullname/{fullname}")]
 
         public IActionResult GetByfullname(string fullname)
         {
-            var client = _dataBase.Registers.FindAll(c => c.fullName == fullname);
-            if (client.Capacity == 0) return NotFound("Client not found!");
+            return SafeAction(() =>
+            {
+                var client = _dataBase.Registers.FindAll(c => c.fullName == fullname);
+                if (client.Capacity == 0) return NotFound("Client not found!");
 
-            return Ok(client);
-
+                return Ok(client);
+            });
         }
 
         [HttpGet("Byemail/{email}")]
@@ -196,7 +197,7 @@ namespace APIDesafioWarren.Controllers
         public IActionResult Post(ClientRegister client)
         {
             if (ClientValidator.validEmail(client))
-            {   
+            {
                 _dataBase.add(client);
                 return Created("~api/client", "Client succefully registered! Your ID is: " + client.Id);
             }
@@ -214,7 +215,7 @@ namespace APIDesafioWarren.Controllers
                 return NotFound("Client not found!");
             }
 
-            _dataBase.refresh(client,cli);
+            _dataBase.refresh(client, cli);
 
             return Ok(cli);
 
@@ -232,6 +233,23 @@ namespace APIDesafioWarren.Controllers
             }
             _dataBase.remove(cli);
             return Ok("Client removed!");
+        }
+
+        private IActionResult SafeAction(Func<IActionResult> action)
+        {
+            try
+            {
+                return action?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, ex.InnerException);
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
     }
 }
