@@ -43,11 +43,13 @@ namespace APIDesafioWarren.Controllers
 
         public IActionResult GetByfullname(string fullname)
         {
+            return SafeAction(() =>
+            { 
             var client = _dataBase.Registers.FindAll(c => c.fullName == fullname);
             if (client.Capacity == 0) return NotFound("Client not found!");
 
             return Ok(client);
-
+            });
         }
 
         [HttpGet("Byemail/{email}")]
@@ -226,7 +228,6 @@ namespace APIDesafioWarren.Controllers
         public IActionResult Delete(int id)
         {
             var cli = _dataBase.Registers.FirstOrDefault(c => c.Id == id);
-
             if (cli == null)
             {
                 return NotFound("Client not found!");
@@ -247,7 +248,7 @@ namespace APIDesafioWarren.Controllers
                         return StatusCode(StatusCodes.Status500InternalServerError, ex.InnerException);
                     }
 
-                    return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+                        return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
                 }
 
             }
