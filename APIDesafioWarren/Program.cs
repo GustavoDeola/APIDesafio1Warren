@@ -6,11 +6,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 
-builder.Services.AddControllers().AddFluentValidation
+builder.Services.
+AddControllers()
+.AddFluentValidation
 ( cfg => cfg.RegisterValidatorsFromAssemblyContaining<ClientValidator>());
 
-builder.Services.AddSwaggerGen();
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.
+    AddSwaggerGen();
+builder.Services.
+    AddEndpointsApiExplorer();
 
 
 builder.Services.AddMemoryCache();
@@ -26,6 +30,7 @@ if (app.Environment.IsDevelopment())
 
 //app.UseAuthorization();
 
-app.MapControllers();
+app
+    .MapControllers();
 
 app.Run();

@@ -12,12 +12,12 @@ namespace APIDesafioWarren.Validations
         public ClientValidator()
         {
             RuleFor(c => c.fullName)
-             .NotEmpty()
-             .MaximumLength(30)
-             .WithMessage("Full name surpasses the limit off characters")
-             .WithMessage("Insert your full name")
-            .MinimumLength(6)
-            .WithMessage("Full name must have more than 6 characters");
+                .NotEmpty()
+                .MaximumLength(30)
+                .WithMessage("Full name surpasses the limit off characters")
+                .WithMessage("Insert your full name")
+                .MinimumLength(6)
+                .WithMessage("Full name must have more than 6 characters");
 
             RuleFor(c => c.email)
                 .NotEmpty()
@@ -50,7 +50,7 @@ namespace APIDesafioWarren.Validations
                 .WithMessage("Invalid cellphone");
 
             RuleFor(c => c.birthdate)
-                .LessThan(DateTime.Parse("01/01/2006"))
+                .Must(v => ValidAges(v))
                 .WithMessage("You must be at least 16 years old");          
 
             RuleFor(c => c.country)
@@ -93,7 +93,14 @@ namespace APIDesafioWarren.Validations
                 return false;
         }
 
+        private static bool ValidAges (DateTime birthdate)
+        {
+            var s = new DateTime(DateTime.Now.Year, birthdate.Month, birthdate.Day);
 
+            var yearsDifference = s.Year - birthdate.Year;
+
+            return yearsDifference >= 16;
+        }
     }
 }
 

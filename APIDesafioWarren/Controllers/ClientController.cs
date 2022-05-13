@@ -8,11 +8,11 @@ namespace APIDesafioWarren.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClientController : ControllerBase
+    public class ClientsController : ControllerBase
     {
         public readonly IDataBase _dataBase;
 
-        public ClientController(IDataBase database)
+        public ClientsController(IDataBase database)
         {
             _dataBase = database;
         }
@@ -28,16 +28,17 @@ namespace APIDesafioWarren.Controllers
 
         public IActionResult GetById(int id)
         {
+            return SafeAction(() =>
+            {
 
-            var client = _dataBase.Registers.FindAll(c => c.Id == id);
-            
-            if (client.Capacity == 0) return NotFound("Client not found!"); 
+                var client = _dataBase.Registers.Find(x => x.Id.Equals(id));
 
-            return Ok(client);
+                if (client is null) return NotFound($"Client not found! for id: {id}");
 
+                return Ok(client);
 
+            });
         }
-
         [HttpGet("Byfullname/{fullname}")]
 
         public IActionResult GetByfullname(string fullname)
@@ -197,10 +198,10 @@ namespace APIDesafioWarren.Controllers
         {
             if (ClientValidator.validEmail(client))
             {   
-                _dataBase.add(client);
+                _dataBase.Add(client);
                 return Created("~api/client", "Client succefully registered! Your ID is: " + client.Id);
             }
-            return BadRequest("Email invalid");
+                return BadRequest("Email invalid");
         }
 
 
@@ -214,7 +215,7 @@ namespace APIDesafioWarren.Controllers
                 return NotFound("Client not found!");
             }
 
-            _dataBase.refresh(client,cli);
+            _dataBase.Update(client,cli);
 
             return Ok(cli);
 
@@ -230,9 +231,27 @@ namespace APIDesafioWarren.Controllers
             {
                 return NotFound("Client not found!");
             }
-            _dataBase.remove(cli);
+            _dataBase.Remove(cli);
             return Ok("Client removed!");
         }
+            private IActionResult SafeAction(Func<IActionResult> action)
+            {
+                try
+                {
+                    return action?.Invoke();
+                }
+                catch (Exception ex)
+                {
+                    if (ex.InnerException != null)
+                    {
+                        return StatusCode(StatusCodes.Status500InternalServerError, ex.InnerException);
+                    }
+
+                    return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+                }
+
+            }
+        
     }
 }
 

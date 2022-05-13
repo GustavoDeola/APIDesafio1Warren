@@ -2,9 +2,9 @@
 {
     public class ClientRegister
     {
-
-
-        public ClientRegister() { }
+        public ClientRegister()
+        {
+        }
 
         public ClientRegister(int id, string fullname, string email, string emailconfirmation, string cpf, string cellphone, DateTime birthdate, bool emailSms, bool Whatsapp, string country, string city, string postalcode, string address, int number)
         {
