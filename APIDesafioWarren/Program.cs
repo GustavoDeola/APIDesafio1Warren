@@ -4,21 +4,20 @@ using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
 builder.Services.
 AddControllers()
 .AddFluentValidation
-( cfg => cfg.RegisterValidatorsFromAssemblyContaining<ClientValidator>());
+( cfg => cfg.RegisterValidatorsFromAssemblyContaining<CustomerValidator>());
 
 builder.Services.
     AddSwaggerGen();
 builder.Services.
     AddEndpointsApiExplorer();
+builder.Services
+    .AddMemoryCache();
+builder.Services
+    .AddSingleton<ICustomerServices, CustomerServices>();
 
-
-builder.Services.AddMemoryCache();
-builder.Services.AddSingleton<IDataBase, DataBase>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -26,11 +25,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-//app.UseHttpsRedirection();
 
-//app.UseAuthorization();
-
-app
-    .MapControllers();
-
+app.MapControllers();
 app.Run();

@@ -6,12 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace APIDesafioWarren.Validations
 {
-    public class ClientValidator : AbstractValidator<ClientRegister>
-
+    public class CustomerValidator : AbstractValidator<Customer>
     {
-        public ClientValidator()
+        public CustomerValidator()
         {
-            RuleFor(c => c.fullName)
+            RuleFor(c => c.FullName)
                 .NotEmpty()
                 .MaximumLength(30)
                 .WithMessage("Full name surpasses the limit off characters")
@@ -19,7 +18,7 @@ namespace APIDesafioWarren.Validations
                 .MinimumLength(6)
                 .WithMessage("Full name must have more than 6 characters");
 
-            RuleFor(c => c.email)
+            RuleFor(c => c.Email)
                 .NotEmpty()
                 .MinimumLength(6)
                 .WithMessage("Insert a valid email!")
@@ -27,33 +26,31 @@ namespace APIDesafioWarren.Validations
                 .WithMessage("Insert a valid email!")
                 .EmailAddress();
                 
-
-            RuleFor(c => c.emailConfirmation)
+            RuleFor(c => c.EmailConfirmation)
                 .NotEmpty()
                 .WithMessage("Please complete this field")
                 .EmailAddress();
 
-
-            RuleFor(c => c.cpf)
+            RuleFor(c => c.Cpf)
                 .NotEmpty()
                 .WithMessage("Please complete this field")
-                .Must(v => v.validCpf())
+                .Must(v => v.ValidCpf())
                 .WithMessage("Invalid CPF")
                 .Length(14)
                 .WithMessage("CPF must have to contain 14 characters");
 
-            RuleFor(c => c.cellphone)
+            RuleFor(c => c.Cellphone)
                 .NotEmpty()
                 .WithMessage("Please complete this field")
-                .Must(v => v.validCellphone())
+                .Must(v => v.ValidCellphone())
                 .Length(11)
                 .WithMessage("Invalid cellphone");
 
-            RuleFor(c => c.birthdate)
+            RuleFor(c => c.Birthdate)
                 .Must(v => ValidAges(v))
                 .WithMessage("You must be at least 16 years old");          
 
-            RuleFor(c => c.country)
+            RuleFor(c => c.Country)
                 .NotEmpty()
                 .WithMessage("Please complete this field")
                 .MaximumLength(35)
@@ -61,7 +58,7 @@ namespace APIDesafioWarren.Validations
                 .MinimumLength(5)
                 .WithMessage("The country name is too short");
 
-            RuleFor(c => c.city)
+            RuleFor(c => c.City)
                 .NotEmpty()
                 .WithMessage("Please complete this field")
                 .MaximumLength(40)
@@ -69,38 +66,37 @@ namespace APIDesafioWarren.Validations
                 .MinimumLength(3)
                 .WithMessage("The City informed is too short, please enter at least 3 characters");
 
-            RuleFor(c => c.postalCode)
+            RuleFor(c => c.PostalCode)
                 .NotEmpty()
                 .WithMessage("Please complete this field")
-                .Must(v => v.validPostalCode())
+                .Must(v => v.ValidPostalCode())
                 .Length(9)
                 .WithMessage("Invalid postal code");
 
-            RuleFor(c => c.address)
+            RuleFor(c => c.Address)
                 .NotEmpty()
                 .WithMessage("Please complete this field");
 
-            RuleFor(c => c.number)
+            RuleFor(c => c.Number)
                 .NotEmpty()
                 .WithMessage("Please complete this field");
         }
-        public static bool validEmail(ClientRegister client)
+        public static bool ValidEmail(Customer client)
         {
-            if (client.emailConfirmation == client.email)
+            if (client.EmailConfirmation == client.Email)
             {
                 return true;
             }
                 return false;
         }
-
         private static bool ValidAges (DateTime birthdate)
         {
-            var s = new DateTime(DateTime.Now.Year, birthdate.Month, birthdate.Day);
+             var s = new DateTime(DateTime.Now.Year, birthdate.Month, birthdate.Day);
 
-            var yearsDifference = s.Year - birthdate.Year;
+             var yearsDifference = s.Year - birthdate.Year;
 
-            return yearsDifference >= 16;
-        }
+                return yearsDifference >= 16;
+        }    
     }
 }
 
