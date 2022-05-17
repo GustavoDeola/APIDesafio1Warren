@@ -17,7 +17,7 @@
             string postalcode,
             string address,
             int number
-            )
+        )
         {
             Id = id;
             FullName = fullname;
@@ -27,13 +27,14 @@
             Cellphone = cellphone;
             Birthdate = birthdate;
             EmailSms = emailSms;
-            Whatsapp = Whatsapp;
+            Whatsapp = whatsapp;
             Country = country;
             City = city;
             PostalCode = postalcode;
             Address = address;
             Number = number;
         }
+
         public int Id { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }

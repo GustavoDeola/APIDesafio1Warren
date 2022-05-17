@@ -4,21 +4,29 @@ namespace APIDesafioWarren.DataBase
 {
     public class CustomerServices : ICustomerServices
     {
-        public readonly ICustomerServices _database;
-        public List<Customer> Registers { get; set; } = new List<Customer>();
+        private readonly List<Customer> _customers = new List<Customer>();
 
-        public List<Customer> GetAll(Customer customer)
+        public List<Customer> GetAll(Predicate<Customer> predicate = null)
         {
-            return Registers.FindAll(c => c.Equals(customer));
+            return predicate is null
+                ? _customers
+                : _customers.FindAll(predicate);
         }
+
+        public Customer GetBy(Predicate<Customer> predicate)
+        {    
+            var customer = _customers.Find(predicate);
+            return customer;
+        }
+
         public void Add(Customer customer)
         {
-            int incrementId = Registers.LastOrDefault()?.Id ?? default;
+            int incrementId = _customers.LastOrDefault()?.Id ?? default;
            
-            customer.Id = incrementId +1;
-            Registers.Add(customer);
-            
+            customer.Id = incrementId + 1;
+            _customers.Add(customer);
         }
+
         public void Update(Customer customer, Customer customerChange)
         {
             customerChange.FullName = customer.FullName;
@@ -34,10 +42,10 @@ namespace APIDesafioWarren.DataBase
             customerChange.Number = customer.Number;
             customerChange.Whatsapp = customer.Whatsapp;
         }
+
         public void Remove(Customer customer)
         {
-            Registers.Remove(customer);
+            _customers.Remove(customer);
         }
-
     }
 }

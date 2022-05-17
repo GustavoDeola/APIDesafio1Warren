@@ -3,12 +3,11 @@
 namespace APIDesafioWarren.DataBase
 {
     public interface ICustomerServices
-    {
-        public List <Customer> Registers { get; set; }
-        public List <Customer> GetAll(Customer client);
+    { 
+        List<Customer> GetAll(Predicate<Customer> predicate = null);
         public void Add(Customer client);
         public void Update(Customer client,Customer clientChange);
         public void Remove(Customer client);
-         
+        Customer GetBy(Predicate<Customer> predicate);
     }
 }
