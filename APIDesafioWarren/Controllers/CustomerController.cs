@@ -3,6 +3,7 @@ using APIDesafioWarren.Models;
 using APIDesafioWarren.Validations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace APIDesafioWarren.Controllers
 {
@@ -20,7 +21,14 @@ namespace APIDesafioWarren.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_customerServices.GetAll());
+            return SafeAction(() =>
+            {
+               var findCustomers = _customerServices.GetAll();
+
+               return findCustomers.Count is 0 
+                   ? NotFound("Customer not found!")
+                   : Ok(findCustomers);
+            });
         }
 
         [HttpGet("{id:int}")]
@@ -225,15 +233,9 @@ namespace APIDesafioWarren.Controllers
         {
             return SafeAction(() =>
             {
-                var cli = _customerServices
-                        .GetBy(c => c.Id == id);
-
-                if (cli is null)
-                {
-                    return NotFound("Customer not found!");
-                }
-                _customerServices.Update(customer, cli);
-                return Ok(cli);
+                return !_customerServices.Update(id, customer)
+                ? BadRequest("Customer update failed")
+                : Ok(customer);
             });
         }
 
@@ -242,15 +244,9 @@ namespace APIDesafioWarren.Controllers
         {
             return SafeAction(() =>
             {
-                var cli = _customerServices
-                        .GetBy(c => c.Id == id);
-
-                if (cli is null)
-                {
-                    return NotFound("Customer not found!");
-                }
-                _customerServices.Remove(cli);
-                return Ok("Customer removed!");
+                return !_customerServices.Remove(id)
+                 ? BadRequest("Fail to remove a customer")
+                 : NoContent();
             });
         }
         private IActionResult SafeAction(Func<IActionResult> action)
@@ -268,9 +264,7 @@ namespace APIDesafioWarren.Controllers
 
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
-
         }
-
     }
 }
 

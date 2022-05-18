@@ -1,4 +1,6 @@
 ﻿using APIDesafioWarren.Models;
+using System;
+using System.Collections.Generic;
 
 namespace APIDesafioWarren.DataBase
 {
@@ -6,8 +8,8 @@ namespace APIDesafioWarren.DataBase
     { 
         List<Customer> GetAll(Predicate<Customer> predicate = null);
         public void Add(Customer client);
-        public void Update(Customer client,Customer clientChange);
-        public void Remove(Customer client);
+        public bool Update(int id, Customer clientChange);
+        public bool Remove(int id);
         Customer GetBy(Predicate<Customer> predicate);
     }
 }

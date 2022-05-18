@@ -1,4 +1,7 @@
 ﻿using APIDesafioWarren.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace APIDesafioWarren.DataBase
 {
@@ -8,9 +11,15 @@ namespace APIDesafioWarren.DataBase
 
         public List<Customer> GetAll(Predicate<Customer> predicate = null)
         {
-            return predicate is null
-                ? _customers
-                : _customers.FindAll(predicate);
+            if (predicate is null)
+            {
+                return _customers;
+            }
+            var findCustomers = _customers.FindAll(predicate);
+
+            return findCustomers.Count is 0
+                ? null
+                : findCustomers;
         }
 
         public Customer GetBy(Predicate<Customer> predicate)
@@ -27,8 +36,13 @@ namespace APIDesafioWarren.DataBase
             _customers.Add(customer);
         }
 
-        public void Update(Customer customer, Customer customerChange)
+        public bool Update(int id, Customer customerChange)
         {
+            var customer = GetBy(c => c.Id == id);
+
+            if (customer is null)
+                return false;
+            
             customerChange.FullName = customer.FullName;
             customerChange.Email = customer.Email;
             customerChange.EmailConfirmation = customer.EmailConfirmation;
@@ -41,11 +55,16 @@ namespace APIDesafioWarren.DataBase
             customerChange.Address = customer.Address;
             customerChange.Number = customer.Number;
             customerChange.Whatsapp = customer.Whatsapp;
+                return true;
         }
 
-        public void Remove(Customer customer)
+        public bool Remove(int id)
         {
-            _customers.Remove(customer);
+            var cli = GetBy(c => c.Id == id);
+            if (cli is null) return false;
+
+            _customers.Remove(cli);
+            return true;
         }
     }
 }
