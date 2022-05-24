@@ -1,8 +1,11 @@
 ﻿using APIDesafioWarren.DataBase;
 using APIDesafioWarren.Models;
 using APIDesafioWarren.Validations;
+using Domain_Models.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 
 namespace APIDesafioWarren.Controllers
 {
@@ -20,7 +23,16 @@ namespace APIDesafioWarren.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_customerServices.GetAll());
+            return SafeAction(() =>
+            {
+               var findCustomers = _customerServices.GetAll();
+
+               return findCustomers.Count is 0 
+                   ? Ok()
+                   : Ok(findCustomers);
+
+                var returnCustomers = new List<CustomerDto>();
+            });
         }
 
         [HttpGet("{id:int}")]
@@ -213,7 +225,7 @@ namespace APIDesafioWarren.Controllers
                 {
                     _customerServices.Add(customer);
 
-                    return Created("~api/customer", "Customer succefully registered! Your ID is: " + customer.Id);
+                    return Created("~api/customer", $"Customer succefully registered! Your ID is: {customer.Id}");
                 }
 
                 return BadRequest("Email invalid");
@@ -225,15 +237,9 @@ namespace APIDesafioWarren.Controllers
         {
             return SafeAction(() =>
             {
-                var cli = _customerServices
-                        .GetBy(c => c.Id == id);
-
-                if (cli is null)
-                {
-                    return NotFound("Customer not found!");
-                }
-                _customerServices.Update(customer, cli);
-                return Ok(cli);
+                return !_customerServices.Update(id, customer)
+                ? NotFound($"Customer not found for Id: {id}")
+                : Ok(customer);
             });
         }
 
@@ -242,15 +248,9 @@ namespace APIDesafioWarren.Controllers
         {
             return SafeAction(() =>
             {
-                var cli = _customerServices
-                        .GetBy(c => c.Id == id);
-
-                if (cli is null)
-                {
-                    return NotFound("Customer not found!");
-                }
-                _customerServices.Remove(cli);
-                return Ok("Customer removed!");
+                return !_customerServices.Remove(id)
+                 ? NotFound($"Customer not found for Id: {id}")
+                 : NoContent();
             });
         }
         private IActionResult SafeAction(Func<IActionResult> action)
@@ -268,9 +268,7 @@ namespace APIDesafioWarren.Controllers
 
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
-
         }
-
     }
 }
 
