@@ -40,8 +40,7 @@ namespace APIDesafioWarren.DataBase
         {
             var customer = GetBy(c => c.Id == id);
 
-            if (customer is null)
-                return false;
+            if (customer is null) return false;
             
             customerChange.FullName = customer.FullName;
             customerChange.Email = customer.Email;
