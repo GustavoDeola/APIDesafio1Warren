@@ -225,7 +225,7 @@ namespace APIDesafioWarren.Controllers
                 {
                     _customerServices.Add(customer);
 
-                    return Created("~api/customer", "Customer succefully registered! Your ID is: " + customer.Id);
+                    return Created("~api/customer", $"Customer succefully registered! Your ID is: {customer.Id}");
                 }
 
                 return BadRequest("Email invalid");
@@ -238,7 +238,7 @@ namespace APIDesafioWarren.Controllers
             return SafeAction(() =>
             {
                 return !_customerServices.Update(id, customer)
-                ? NotFound("Customer not found for Id: " + customer.Id)
+                ? NotFound($"Customer not found for Id: {id}")
                 : Ok(customer);
             });
         }
@@ -249,7 +249,7 @@ namespace APIDesafioWarren.Controllers
             return SafeAction(() =>
             {
                 return !_customerServices.Remove(id)
-                 ? NotFound("Customer not found for Id: " + id)
+                 ? NotFound($"Customer not found for Id: {id}")
                  : NoContent();
             });
         }
