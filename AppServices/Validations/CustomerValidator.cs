@@ -1,7 +1,5 @@
-﻿using APIDesafioWarren.DataBase;
-using APIDesafioWarren.Models;
+﻿using APIDesafioWarren.Models;
 using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
 using System;
 
 namespace APIDesafioWarren.Validations

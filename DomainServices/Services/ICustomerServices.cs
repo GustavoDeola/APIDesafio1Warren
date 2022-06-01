@@ -7,8 +7,8 @@ namespace APIDesafioWarren.DataBase
     public interface ICustomerServices
     { 
         List<Customer> GetAll(Predicate<Customer> predicate = null);
-        public void Add(Customer client);
-        public bool Update(int id, Customer clientChange);
+        public void Add(Customer customer);
+        public bool Update(int id, Customer customerChange);
         public bool Remove(int id);
         Customer GetBy(Predicate<Customer> predicate);
     }

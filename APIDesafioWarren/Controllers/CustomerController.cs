@@ -1,11 +1,15 @@
-﻿using APIDesafioWarren.DataBase;
+﻿
+using APIDesafioWarren.DataBase;
 using APIDesafioWarren.Models;
 using APIDesafioWarren.Validations;
-using Domain_Models.Dtos;
+using Application.Models.DTOs;
+using AppServices;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace APIDesafioWarren.Controllers
 {
@@ -13,11 +17,14 @@ namespace APIDesafioWarren.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        private readonly ICustomerServices _customerServices;
+        private readonly ICustomerAppService _customerAppService;
 
-        public CustomersController(ICustomerServices database)
+        private readonly IMapper _mapper;
+
+        public CustomersController(ICustomerAppService appServices, IMapper mapper)
         {
-            _customerServices = database;
+            _customerAppService = appServices ?? throw new ArgumentNullException(nameof(appServices));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet]
@@ -25,13 +32,11 @@ namespace APIDesafioWarren.Controllers
         {
             return SafeAction(() =>
             {
-               var findCustomers = _customerServices.GetAll();
+                var findCustomers = _customerAppService.GetAll();
 
-               return findCustomers.Count is 0 
-                   ? Ok()
-                   : Ok(findCustomers);
-
-                var returnCustomers = new List<CustomerDto>();
+                return findCustomers.Count() is 0
+                    ? NotFound()
+                    : Ok(_mapper.Map<IEnumerable<CustomerDTO>>(findCustomers));
             });
         }
 
@@ -40,12 +45,14 @@ namespace APIDesafioWarren.Controllers
         {
             return SafeAction(() =>
             {
-                var customer = _customerServices
+                var customer = _customerAppService
                     .GetBy(x => x.Id.Equals(id));
 
-                return customer is null 
+                var customerDTO = _mapper.Map<CustomerDTO>(customer);
+
+                return customer is null
                     ? NotFound($"Customer not found! for id: {id}")
-                    : Ok(customer);
+                    : Ok(customerDTO);
             });
         }
 
@@ -54,12 +61,14 @@ namespace APIDesafioWarren.Controllers
         {
             return SafeAction(() =>
             {
-                var customer = _customerServices
+                var customer = _customerAppService
                     .GetAll(c => c.FullName == fullname);
 
-                return customer.Count is 0 
+                var customerDTO = _mapper.Map<IEnumerable<CustomerDTO>>(customer);
+
+                return customer.Count() is 0
                     ? NotFound("Customer not found!")
-                    : Ok(customer);
+                    : Ok(customerDTO);
             });
         }
 
@@ -68,26 +77,14 @@ namespace APIDesafioWarren.Controllers
         {
             return SafeAction(() =>
             {
-                var customer = _customerServices
+                var customer = _customerAppService
                         .GetAll(c => c.Email == email);
 
-                return customer.Count is 0 
-                    ? NotFound("Customer not found!")
-                    : Ok(customer);
-            });
-        }
+                var customerDTO = _mapper.Map<IEnumerable<CustomerDTO>>(customer);
 
-        [HttpGet("Bybirthdate/{birthdate}")]
-        public IActionResult GetBybirthdate(DateTime birthdate)
-        {
-            return SafeAction(() =>
-            {
-                var customer = _customerServices
-                   .GetAll(c => c.Birthdate == birthdate);
-
-                return customer.Count is 0 
+                return customer.Count() is 0
                     ? NotFound("Customer not found!")
-                    : Ok(customer);
+                    : Ok(customerDTO);
             });
         }
 
@@ -96,137 +93,25 @@ namespace APIDesafioWarren.Controllers
         {
             return SafeAction(() =>
             {
-                var customer = _customerServices
+                var customer = _customerAppService
                     .GetAll(c => c.Equals(cpf));
 
-                return customer.Count is 0 
+                var customerDTO = _mapper.Map<IEnumerable<CustomerDTO>>(customer);
+
+                return customer.Count() is 0
                     ? NotFound("Customer not found!")
-                    : Ok(customer);
-            });
-        }
-
-        [HttpGet("Bycellphone/{cellphone}")]
-        public IActionResult GetBycellphone(string cellphone)
-        {
-            return SafeAction(() =>
-            {
-                var customer = _customerServices
-                    .GetAll(c => c.Cellphone == cellphone);
-
-                return customer.Count is 0 
-                    ? NotFound("Customer not found!")
-                    : Ok(customer);
-            });
-        }
-
-        [HttpGet("ByemailSms/{emailSms}")]
-        public IActionResult GetByemailsms(bool emailSms)
-        {
-            return SafeAction(() =>
-            {
-                var customer = _customerServices
-                     .GetAll(c => c.EmailSms == emailSms);
-
-                return customer.Count is 0 
-                    ? NotFound("Customer not found!")
-                    : Ok(customer);
-            });
-        }
-
-        [HttpGet("Bywhatsapp/{whatsapp}")]
-        public IActionResult GetBywhatsapp(bool whatsapp)
-        {
-            return SafeAction(() =>
-           {
-               var customer = _customerServices
-                      .GetAll(c => c.Whatsapp == whatsapp);
-
-               return customer.Count is 0
-                    ? NotFound("Customer not found!")
-                    : Ok(customer);
-           });
-        }
-
-        [HttpGet("Bycountry/{country}")]
-
-        public IActionResult GetBycountry(string country)
-        {
-            return SafeAction(() =>
-            {
-                var customer = _customerServices
-                        .GetAll(c => c.Country == country);
-
-                return customer.Count is 0 
-                    ? NotFound("Customer not found!")
-                    : Ok(customer);
-            });
-        }
-
-        [HttpGet("Bycity/{city}")]
-        public IActionResult GetBycity(string city)
-        {
-            return SafeAction(() =>
-            {
-                var customer = _customerServices
-                        .GetAll(c => c.City == city);
-
-                return customer.Count is 0 
-                    ? NotFound ("Customer not found!!")
-                    : Ok(customer);
-            });
-        }
-
-        [HttpGet("Bypostalcode/{postalcode}")]
-        public IActionResult GetBypostalcode(string postalcode)
-        {
-            return SafeAction(() =>
-            {
-                var customer = _customerServices
-                        .GetAll(c => c.PostalCode == postalcode);
-
-                return customer.Count is 0 
-                    ? NotFound("Customer not found!")
-                    : Ok(customer);
-            });
-        }
-
-        [HttpGet("Byadress/{adress}")]
-
-        public IActionResult GetByadress(string adress)
-        {
-            var customer = _customerServices
-                    .GetAll(c => c.Address == adress);
-
-            return customer.Count is 0 
-                    ? NotFound("Customer not found!!")
-                    : Ok(customer);
-        }
-
-        [HttpGet("Bynumber/{number}")]
-        public IActionResult GetBynumber(int number)
-        {
-            return SafeAction(() =>
-            {
-                var customer = _customerServices
-                        .GetAll(c => c.Number == number);
-
-                return customer.Count is 0 
-                    ? NotFound("Customer not found!")
-                    : Ok(customer);
+                    : Ok(customerDTO);
             });
         }
 
         [HttpPost]
-        public IActionResult Post(Customer customer)
+        public IActionResult Post(CustomerDTO model)
         {
             return SafeAction(() =>
-            {
-                if (CustomerValidator.ValidEmail(customer))
-                {
-                    _customerServices.Add(customer);
+            { 
+                    _customerAppService.Add(model);
 
-                    return Created("~api/customer", $"Customer succefully registered! Your ID is: {customer.Id}");
-                }
+                    return Created("~api/customer", $"Customer succefully registered! Your ID is: {model.Id}");
 
                 return BadRequest("Email invalid");
             });
@@ -237,7 +122,7 @@ namespace APIDesafioWarren.Controllers
         {
             return SafeAction(() =>
             {
-                return !_customerServices.Update(id, customer)
+                return !_customerAppService.Update(id, customer)
                 ? NotFound($"Customer not found for Id: {id}")
                 : Ok(customer);
             });
@@ -248,7 +133,7 @@ namespace APIDesafioWarren.Controllers
         {
             return SafeAction(() =>
             {
-                return !_customerServices.Remove(id)
+                return !_customerAppService.Remove(id)
                  ? NotFound($"Customer not found for Id: {id}")
                  : NoContent();
             });
