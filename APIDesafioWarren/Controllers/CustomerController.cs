@@ -36,7 +36,7 @@ namespace APIDesafioWarren.Controllers
 
                 return findCustomers.Count() is 0
                     ? NotFound()
-                    : Ok(_mapper.Map<IEnumerable<CustomerDTO>>(findCustomers));
+                    : Ok(_mapper.Map<IEnumerable<CustomerResponse>>(findCustomers));
             });
         }
 
@@ -48,7 +48,7 @@ namespace APIDesafioWarren.Controllers
                 var customer = _customerAppService
                     .GetBy(x => x.Id.Equals(id));
 
-                var customerDTO = _mapper.Map<CustomerDTO>(customer);
+                var customerDTO = _mapper.Map<CustomerResponse>(customer);
 
                 return customer is null
                     ? NotFound($"Customer not found! for id: {id}")
@@ -64,7 +64,7 @@ namespace APIDesafioWarren.Controllers
                 var customer = _customerAppService
                     .GetAll(c => c.FullName == fullname);
 
-                var customerDTO = _mapper.Map<IEnumerable<CustomerDTO>>(customer);
+                var customerDTO = _mapper.Map<IEnumerable<CustomerResponse>>(customer);
 
                 return customer.Count() is 0
                     ? NotFound("Customer not found!")
@@ -80,7 +80,7 @@ namespace APIDesafioWarren.Controllers
                 var customer = _customerAppService
                         .GetAll(c => c.Email == email);
 
-                var customerDTO = _mapper.Map<IEnumerable<CustomerDTO>>(customer);
+                var customerDTO = _mapper.Map<IEnumerable<CustomerResponse>>(customer);
 
                 return customer.Count() is 0
                     ? NotFound("Customer not found!")
@@ -96,7 +96,7 @@ namespace APIDesafioWarren.Controllers
                 var customer = _customerAppService
                     .GetAll(c => c.Equals(cpf));
 
-                var customerDTO = _mapper.Map<IEnumerable<CustomerDTO>>(customer);
+                var customerDTO = _mapper.Map<IEnumerable<CustomerResponse>>(customer);
 
                 return customer.Count() is 0
                     ? NotFound("Customer not found!")
@@ -105,26 +105,24 @@ namespace APIDesafioWarren.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(CustomerDTO model)
+        public IActionResult Post(CustomerResponse customerResponse)
         {
             return SafeAction(() =>
             { 
-                    _customerAppService.Add(model);
+                 _customerAppService.Add(customerResponse);
 
-                    return Created("~api/customer", $"Customer succefully registered! Your ID is: {model.Id}");
-
-                return BadRequest("Email invalid");
+                return Created("~api/customer", $"Customer succefully registered! Your ID is: {customerResponse.Id}");
             });
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, Customer customer)
+        public IActionResult Put(int id, CustomerResponse customerDTOChange)
         {
             return SafeAction(() =>
             {
-                return !_customerAppService.Update(id, customer)
+                return !_customerAppService.Update(customerDTOChange)
                 ? NotFound($"Customer not found for Id: {id}")
-                : Ok(customer);
+                : Ok(customerDTOChange);
             });
         }
 

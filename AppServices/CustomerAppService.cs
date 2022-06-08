@@ -19,10 +19,10 @@ namespace AppServices
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public IEnumerable<Customer> GetAll(Predicate<Customer> predicate = null)
+        public IEnumerable<CustomerResponse> GetAll(Predicate<Customer> predicate = null)
         {
             var getAllCustomers = _customerService.GetAll(predicate);
-            return _mapper.Map<IEnumerable<Customer>>(getAllCustomers);
+            return _mapper.Map<IEnumerable<CustomerResponse>>(getAllCustomers);
         }
 
         public Customer GetBy(Predicate<Customer> predicate)
@@ -32,16 +32,16 @@ namespace AppServices
             return customerDTO;
         }
 
-        public void Add(CustomerDTO customerDTO)
+        public void Add(CustomerResponse customerDTO)
         {
            var mapper = _mapper.Map<Customer>(_customerService);
             _customerService.Add(mapper);
         }
 
-        public bool Update(int id, Customer customerChange)
-        {
-            var updateCustomer = _customerService.Update(id, customerChange);
-            return updateCustomer;
+        public bool Update(CustomerResponse customerDTOChange)
+        { 
+            var mapper = _mapper.Map<Customer>(customerDTOChange);
+           return _customerService.Update(mapper);
         }
 
         public bool Remove(int id)

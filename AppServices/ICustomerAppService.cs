@@ -7,9 +7,9 @@ namespace AppServices
 {
     public interface ICustomerAppService
     {
-        IEnumerable<Customer> GetAll(Predicate<Customer> predicate = null);
-        public void Add(CustomerDTO customerDTO);
-        public bool Update(int id, Customer customerChange);
+        IEnumerable<CustomerResponse> GetAll(Predicate<Customer> predicate = null);
+        public void Add(CustomerResponse customerDTO);
+        public bool Update(CustomerResponse customerDTOChange);
         public bool Remove(int id);
         Customer GetBy(Predicate<Customer> predicate);
     }

@@ -7,15 +7,15 @@ namespace APIDesafioWarren.DataBase
 {
     public class CustomerServices : ICustomerServices
     {
-        private readonly List<Customer> _customers = new List<Customer>();
+        private readonly List<Customer> _customersServices = new List<Customer>();
 
         public List<Customer> GetAll(Predicate<Customer> predicate = null)
         {
             if (predicate is null)
             {
-                return _customers;
+                return _customersServices;
             }
-            var findCustomers = _customers.FindAll(predicate);
+            var findCustomers = _customersServices.FindAll(predicate);
 
             return findCustomers.Count is 0
                 ? null
@@ -24,21 +24,21 @@ namespace APIDesafioWarren.DataBase
 
         public Customer GetBy(Predicate<Customer> predicate)
         {    
-            var customer = _customers.Find(predicate);
+            var customer = _customersServices.Find(predicate);
             return customer;
         }
 
         public void Add(Customer customer)
         {
-            int incrementId = _customers.LastOrDefault()?.Id ?? default;
+            int incrementId = _customersServices.LastOrDefault()?.Id ?? default;
            
             customer.Id = incrementId + 1;
-            _customers.Add(customer);
+            _customersServices.Add(customer);
         }
 
-        public bool Update(int id, Customer customerChange)
+        public bool Update(Customer customerChange)
         {
-            var customer = GetBy(c => c.Id == id);
+            var customer = GetBy(c => c.Id == customerChange.Id);
 
             if (customer is null) return false;
             
@@ -62,7 +62,7 @@ namespace APIDesafioWarren.DataBase
             var cli = GetBy(c => c.Id == id);
             if (cli is null) return false;
 
-            _customers.Remove(cli);
+            _customersServices.Remove(cli);
             return true;
         }
     }
