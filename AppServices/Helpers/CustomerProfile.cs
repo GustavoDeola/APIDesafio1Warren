@@ -2,7 +2,7 @@
 using App.Services;
 using Application.Models.DTOs;
 using AutoMapper;
-
+using System.Collections.Generic;
 
 namespace AppServices.Helpers
 {
@@ -11,7 +11,7 @@ namespace AppServices.Helpers
         public CustomerProfile()
         {
             CreateMap<CreateCustomerRequest, Customer>();
-            CreateMap<CustomerResponse, Customer>();
+            CreateMap<Customer, CustomerResponse>();
             CreateMap<UpdateCustomerRequest, Customer>();
 
         }

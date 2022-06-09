@@ -1,5 +1,6 @@
 ﻿using APIDesafioWarren.DataBase;
 using APIDesafioWarren.Models;
+using App.Services;
 using Application.Models.DTOs;
 using AutoMapper;
 using System;
@@ -32,10 +33,11 @@ namespace AppServices
             return customerDTO;
         }
 
-        public void Add(CustomerResponse customerDTO)
+        public int Add(CreateCustomerRequest createcustomerRequest)
         {
-           var mapper = _mapper.Map<Customer>(_customerService);
-            _customerService.Add(mapper);
+           var mapper = _mapper.Map<Customer>(createcustomerRequest);
+           _customerService.Add(mapper);
+            return createcustomerRequest.Id;
         }
 
         public bool Update(CustomerResponse customerDTOChange)

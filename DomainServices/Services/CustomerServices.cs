@@ -15,11 +15,11 @@ namespace APIDesafioWarren.DataBase
             {
                 return _customersServices;
             }
-            var findCustomers = _customersServices.FindAll(predicate);
+            var customers = _customersServices.FindAll(predicate);
 
-            return findCustomers.Count is 0
+            return customers.Count is 0
                 ? null
-                : findCustomers;
+                : customers;
         }
 
         public Customer GetBy(Predicate<Customer> predicate)
@@ -28,12 +28,13 @@ namespace APIDesafioWarren.DataBase
             return customer;
         }
 
-        public void Add(Customer customer)
+        public int Add(Customer customer)
         {
             int incrementId = _customersServices.LastOrDefault()?.Id ?? default;
            
             customer.Id = incrementId + 1;
             _customersServices.Add(customer);
+            return customer.Id;
         }
 
         public bool Update(Customer customerChange)

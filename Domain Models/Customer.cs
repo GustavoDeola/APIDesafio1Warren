@@ -8,7 +8,6 @@ namespace APIDesafioWarren.Models
             int id,
             string fullname,
             string email,
-            string emailConfirmation,
             string cpf,
             string cellphone,
             DateTime birthdate,
@@ -24,7 +23,6 @@ namespace APIDesafioWarren.Models
             Id = id;
             FullName = fullname;
             Email = email;
-            EmailConfirmation = emailConfirmation;
             Cpf = cpf;
             Cellphone = cellphone;
             Birthdate = birthdate;

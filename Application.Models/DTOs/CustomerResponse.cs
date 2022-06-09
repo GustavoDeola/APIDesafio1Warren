@@ -4,8 +4,7 @@ namespace Application.Models.DTOs
 {
     public class CustomerResponse
     {
-        //Response*
-        public int Id { get; set; }
+        //Response
         public string FullName { get; set; }
         public string Email { get; set; }
         public string Cpf { get; set; }

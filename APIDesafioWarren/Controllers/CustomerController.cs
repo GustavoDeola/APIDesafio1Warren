@@ -1,14 +1,10 @@
-﻿
-using APIDesafioWarren.DataBase;
-using APIDesafioWarren.Models;
-using APIDesafioWarren.Validations;
+﻿using App.Services;
 using Application.Models.DTOs;
 using AppServices;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace APIDesafioWarren.Controllers
@@ -19,12 +15,10 @@ namespace APIDesafioWarren.Controllers
     {
         private readonly ICustomerAppService _customerAppService;
 
-        private readonly IMapper _mapper;
-
         public CustomersController(ICustomerAppService appServices, IMapper mapper)
         {
             _customerAppService = appServices ?? throw new ArgumentNullException(nameof(appServices));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            
         }
 
         [HttpGet]
@@ -36,7 +30,7 @@ namespace APIDesafioWarren.Controllers
 
                 return findCustomers.Count() is 0
                     ? NotFound()
-                    : Ok(_mapper.Map<IEnumerable<CustomerResponse>>(findCustomers));
+                    : Ok(findCustomers);
             });
         }
 
@@ -48,70 +42,62 @@ namespace APIDesafioWarren.Controllers
                 var customer = _customerAppService
                     .GetBy(x => x.Id.Equals(id));
 
-                var customerDTO = _mapper.Map<CustomerResponse>(customer);
-
                 return customer is null
                     ? NotFound($"Customer not found! for id: {id}")
-                    : Ok(customerDTO);
+                    : Ok(customer);
             });
         }
 
-        [HttpGet("Byfullname/{fullname}")]
-        public IActionResult GetByfullname(string fullname)
+        [HttpGet("full-name/{fullname}")]
+        public IActionResult GetByFullName(string fullname)
         {
             return SafeAction(() =>
             {
                 var customer = _customerAppService
                     .GetAll(c => c.FullName == fullname);
 
-                var customerDTO = _mapper.Map<IEnumerable<CustomerResponse>>(customer);
-
                 return customer.Count() is 0
                     ? NotFound("Customer not found!")
-                    : Ok(customerDTO);
+                    : Ok(customer);
             });
         }
 
         [HttpGet("Byemail/{email}")]
-        public IActionResult GetByemail(string email)
+        public IActionResult GetByEmail(string email)
         {
             return SafeAction(() =>
             {
                 var customer = _customerAppService
                         .GetAll(c => c.Email == email);
 
-                var customerDTO = _mapper.Map<IEnumerable<CustomerResponse>>(customer);
-
                 return customer.Count() is 0
                     ? NotFound("Customer not found!")
-                    : Ok(customerDTO);
+                    : Ok(customer);
             });
         }
 
         [HttpGet("Bycpf/{cpf}")]
-        public IActionResult GetBycpf(string cpf)
+        public IActionResult GetByCpf(string cpf)
         {
             return SafeAction(() =>
             {
                 var customer = _customerAppService
                     .GetAll(c => c.Equals(cpf));
 
-                var customerDTO = _mapper.Map<IEnumerable<CustomerResponse>>(customer);
-
                 return customer.Count() is 0
                     ? NotFound("Customer not found!")
-                    : Ok(customerDTO);
+                    : Ok(customer);
             });
         }
 
         [HttpPost]
-        public IActionResult Post(CustomerResponse customerResponse)
+        public IActionResult Post(CreateCustomerRequest createCustomerRequest)
         {
             return SafeAction(() =>
-            { 
-                 _customerAppService.Add(customerResponse);
+            {
+                var idcustomer = _customerAppService.Add(createCustomerRequest);
 
-                return Created("~api/customer", $"Customer succefully registered! Your ID is: {customerResponse.Id}");
+                return Created("~api/customer", $"Customer succefully registered! Your ID is: {idcustomer}");
             });
         }
 

@@ -9,22 +9,19 @@ namespace Application.Models.DTOs
 {
     public class UpdateCustomerRequest 
     {
-        private readonly List<CustomerResponse>  _customerResponse = new List<CustomerResponse>();
-        
-        public bool Update(CustomerResponse customerDTOChange, CustomerResponse customerResponse)
-        {
-            var customerFind = _customerResponse.FindIndex(c => c.Equals(c.Id));
-
-            if (customerFind is 0) return false;
-
-             customerDTOChange.FullName = customerResponse.FullName;
-             customerDTOChange.Email = customerResponse.Email;
-             customerDTOChange.Cpf = customerResponse.Cpf;
-             customerDTOChange.Country = customerResponse.Country;
-             customerDTOChange.City = customerResponse.City;
-
-            //_customerResponse[customerResponse] = customerDTOChange;
-            return true;
-        }
+        public int Id { get; set; }
+        public string FullName { get; set; }
+        public string Email { get; set; }
+        public string Cpf { get; set; }
+        public string Cellphone { get; set; }
+        public DateTime Birthdate { get; set; }
+        public bool EmailSms { get; set; }
+        public bool Whatsapp { get; set; }
+        public string Country { get; set; }
+        public string City { get; set; }
+        public string PostalCode { get; set; }
+        public string Address { get; set; }
+        public int Number { get; set; }
     }
 }
+

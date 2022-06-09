@@ -1,28 +1,33 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace APIDesafioWarren.Validations
 {
     public static class ValidatorComplements
     {
+        public static bool ValidFullName(this string fullname)
+        {
+            if (fullname.All(c => c.Equals(fullname.First()))) return false;
+            return true;
+
+
+        }
         public static bool ValidCpf(this string cpf)
         {
-            var formate = "[0-9]{3}\\.?[0-9]{3}\\.?[0-9]{3}\\-?[0-9]{2}";
-
-            return Regex.Match(cpf, formate).Success;
+            if (cpf.All(c => c.Equals(cpf.First()))) return false;
+            return true; 
         }
 
         public static bool ValidPostalCode(this string postalcode)
         {
-            var formate = "[0-9]{5}\\-?[0-9]{3}$";
-
-            return Regex.Match(postalcode, formate).Success;
+            if (postalcode.All(c => c.Equals(postalcode.First()))) return false;
+            return true;
         }
 
         public static bool ValidCellphone(this string cellphone)
         {
-            var formate = "[0-9]{2}?[0-9]{4}?[0-9]{4}";
-
-            return Regex.Match(cellphone, formate).Success;
+            if (cellphone.All(c => c.Equals(cellphone.First()))) return false;
+            return true;
         }
     }
 }
