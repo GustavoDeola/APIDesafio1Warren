@@ -42,7 +42,7 @@ namespace APIDesafioWarren.DataBase
             var customer = GetBy(c => c.Id == customerChange.Id);
 
             if (customer is null) return false;
-            
+            /*
             customerChange.FullName = customer.FullName;
             customerChange.Email = customer.Email;
             customerChange.EmailConfirmation = customer.EmailConfirmation;
@@ -55,6 +55,8 @@ namespace APIDesafioWarren.DataBase
             customerChange.Address = customer.Address;
             customerChange.Number = customer.Number;
             customerChange.Whatsapp = customer.Whatsapp;
+            */
+            _customersServices[customer.Id] = customerChange;
                 return true;
         }
 

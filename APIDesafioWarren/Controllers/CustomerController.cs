@@ -102,13 +102,13 @@ namespace APIDesafioWarren.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, CustomerResponse customerDTOChange)
+        public IActionResult Put(int id, CustomerResponse customerResponseUpdated)
         {
             return SafeAction(() =>
             {
-                return !_customerAppService.Update(customerDTOChange)
+                return !_customerAppService.Update(customerResponseUpdated)
                 ? NotFound($"Customer not found for Id: {id}")
-                : Ok(customerDTOChange);
+                : Ok(customerResponseUpdated);
             });
         }
 

@@ -10,7 +10,7 @@ namespace AppServices
     {
         IEnumerable<CustomerResponse> GetAll(Predicate<Customer> predicate = null);
         public int Add(CreateCustomerRequest createCustomerRequest);
-        public bool Update(CustomerResponse customerDTOChange);
+        public bool Update(CustomerResponse customerResponseUpdated);
         public bool Remove(int id);
         Customer GetBy(Predicate<Customer> predicate);
     }
