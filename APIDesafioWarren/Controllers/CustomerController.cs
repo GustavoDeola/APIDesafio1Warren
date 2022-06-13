@@ -18,7 +18,7 @@ namespace APIDesafioWarren.Controllers
         public CustomersController(ICustomerAppService appServices, IMapper mapper)
         {
             _customerAppService = appServices ?? throw new ArgumentNullException(nameof(appServices));
-            
+
         }
 
         [HttpGet]
@@ -102,13 +102,13 @@ namespace APIDesafioWarren.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, CustomerResponse customerResponseUpdated)
+        public IActionResult Put(int id, UpdateCustomerRequest updateCustomerRequest)
         {
             return SafeAction(() =>
             {
-                return !_customerAppService.Update(customerResponseUpdated)
+                return !_customerAppService.Update(id, updateCustomerRequest)
                 ? NotFound($"Customer not found for Id: {id}")
-                : Ok(customerResponseUpdated);
+                : Ok("Customer sucessfully updated!");
             });
         }
 

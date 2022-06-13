@@ -29,26 +29,27 @@ namespace AppServices
         public Customer GetBy(Predicate<Customer> predicate)
         {
             var getCustomers = _customerService.GetBy(predicate);
-            var customerDTO =  _mapper.Map<Customer>(getCustomers);
+            var customerDTO = _mapper.Map<Customer>(getCustomers);
             return customerDTO;
         }
 
         public int Add(CreateCustomerRequest createcustomerRequest)
         {
-           var mapper = _mapper.Map<Customer>(createcustomerRequest);
-           _customerService.Add(mapper);
-            return createcustomerRequest.Id;
+            var mapper = _mapper.Map<Customer>(createcustomerRequest);
+            _customerService.Add(mapper);
+            return mapper.Id;
         }
 
-        public bool Update(CustomerResponse customerDTOChange)
-        { 
-            var mapper = _mapper.Map<Customer>(customerDTOChange);
-           return _customerService.Update(mapper);
+        public bool Update(int id, UpdateCustomerRequest updateCustomerRequest)
+        {
+            var mapper = _mapper.Map<Customer>(updateCustomerRequest);
+            mapper.Id = id;
+            return _customerService.Update(mapper);
         }
 
         public bool Remove(int id)
         {
-           return _customerService.Remove(id); 
+            return _customerService.Remove(id);
         }
     }
 }

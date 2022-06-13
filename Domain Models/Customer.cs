@@ -5,7 +5,6 @@ namespace APIDesafioWarren.Models
     public class Customer
     {
         public Customer(
-            int id,
             string fullname,
             string email,
             string cpf,
@@ -20,7 +19,6 @@ namespace APIDesafioWarren.Models
             int number
         )
         {
-            Id = id;
             FullName = fullname;
             Email = email;
             Cpf = cpf;

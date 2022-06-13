@@ -23,7 +23,7 @@ namespace APIDesafioWarren.DataBase
         }
 
         public Customer GetBy(Predicate<Customer> predicate)
-        {    
+        {
             var customer = _customersServices.Find(predicate);
             return customer;
         }
@@ -31,7 +31,7 @@ namespace APIDesafioWarren.DataBase
         public int Add(Customer customer)
         {
             int incrementId = _customersServices.LastOrDefault()?.Id ?? default;
-           
+
             customer.Id = incrementId + 1;
             _customersServices.Add(customer);
             return customer.Id;
@@ -39,25 +39,11 @@ namespace APIDesafioWarren.DataBase
 
         public bool Update(Customer customerChange)
         {
-            var customer = GetBy(c => c.Id == customerChange.Id);
+            var findCustomers = _customersServices.FindIndex(c => c.Id == customerChange.Id);
+            if (findCustomers == -1) return false;
 
-            if (customer is null) return false;
-            /*
-            customerChange.FullName = customer.FullName;
-            customerChange.Email = customer.Email;
-            customerChange.EmailConfirmation = customer.EmailConfirmation;
-            customerChange.Cpf = customer.Cpf;
-            customerChange.EmailSms = customer.EmailSms;
-            customerChange.Cellphone = customer.Cellphone;
-            customerChange.Country = customer.Country;
-            customerChange.City = customer.City;
-            customerChange.PostalCode = customer.PostalCode;
-            customerChange.Address = customer.Address;
-            customerChange.Number = customer.Number;
-            customerChange.Whatsapp = customer.Whatsapp;
-            */
-            _customersServices[customer.Id] = customerChange;
-                return true;
+            _customersServices[findCustomers] = customerChange;
+            return true;
         }
 
         public bool Remove(int id)

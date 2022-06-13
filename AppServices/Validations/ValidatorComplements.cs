@@ -10,6 +10,7 @@ namespace APIDesafioWarren.Validations
             if (fullname.All(c => c.Equals(fullname.First()))) return false;
             return true;
 
+            char.IsDigit(fullname.First("1-9"));
 
         }
         public static bool ValidCpf(this string cpf)
