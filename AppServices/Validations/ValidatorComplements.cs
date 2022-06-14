@@ -5,18 +5,22 @@ namespace APIDesafioWarren.Validations
 {
     public static class ValidatorComplements
     {
-        public static bool ValidFullName(this string fullname)
+        public static bool ValidFullName(this string fullName)
         {
-            if (fullname.All(c => c.Equals(fullname.First()))) return false;
-            return true;
+            if (fullName.All(c => c.Equals(fullName.First()))) return false;
+            
+            else if (fullName.Trim() != fullName) return false;
 
-            char.IsDigit(fullname.First("1-9"));
+            return false;
 
+            fullName.All(x => char.IsLetter(x));  return true;
+            
         }
+       
         public static bool ValidCpf(this string cpf)
         {
             if (cpf.All(c => c.Equals(cpf.First()))) return false;
-            return true; 
+            return true;
         }
 
         public static bool ValidPostalCode(this string postalcode)
