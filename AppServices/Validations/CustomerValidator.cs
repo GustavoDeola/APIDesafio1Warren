@@ -12,6 +12,7 @@ namespace APIDesafioWarren.Validations
         {
             RuleFor(c => c.FullName)
                 .NotEmpty()
+                .Must(v => v.ValidFullName())
                 .MaximumLength(30)
                 .MinimumLength(6);
 

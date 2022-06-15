@@ -8,13 +8,20 @@ namespace APIDesafioWarren.Validations
         public static bool ValidFullName(this string fullName)
         {
             if (fullName.All(c => c.Equals(fullName.First()))) return false;
-            
+
             else if (fullName.Trim() != fullName) return false;
+
+            else if (fullName.All(x => char.IsLetter(x)))
+
+                
+                return true;
+            string[] validSpaces = fullName.Split(' ');
+
+            string[] separateNames = fullName[1];
 
             return false;
 
-            fullName.All(x => char.IsLetter(x));  return true;
-            
+
         }
        
         public static bool ValidCpf(this string cpf)
