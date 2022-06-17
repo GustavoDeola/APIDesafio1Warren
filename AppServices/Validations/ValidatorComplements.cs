@@ -7,27 +7,26 @@ namespace APIDesafioWarren.Validations
     {
         public static bool ValidFullName(this string fullName)
         {
+            string[] validSpaces = fullName.Trim().Split(' ');
             if (fullName.All(c => c.Equals(fullName.First()))) return false;
 
             else if (fullName.Trim() != fullName) return false;
 
-            else if (fullName.All(x => char.IsLetter(x)))
+            else if (fullName.All(x => char.IsLetter(x))) return true;
 
-                
-                return true;
-            string[] validSpaces = fullName.Split(' ');
+            else if (fullName.All(v => v.Equals(fullName.First(z => char.IsUpper(z))))) return false;
 
-            string[] separateNames = fullName[1];
+            else if (validSpaces.Length > 0) return true;
 
             return false;
-
-
         }
        
         public static bool ValidCpf(this string cpf)
         {
             if (cpf.All(c => c.Equals(cpf.First()))) return false;
             return true;
+
+           
         }
 
         public static bool ValidPostalCode(this string postalcode)
