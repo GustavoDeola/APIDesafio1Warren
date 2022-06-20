@@ -1,8 +1,6 @@
 ﻿using APIDesafioWarren.Models;
 using App.Services;
-using Application.Models.DTOs;
 using FluentValidation;
-using System;
 
 namespace APIDesafioWarren.Validations
 {
@@ -47,7 +45,6 @@ namespace APIDesafioWarren.Validations
                 .Length(8);
 
         }
-
         public static bool ValidEmail(Customer client)
         {
             if (client.EmailConfirmation == client.Email)

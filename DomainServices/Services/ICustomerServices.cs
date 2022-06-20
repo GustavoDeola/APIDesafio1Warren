@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace APIDesafioWarren.DataBase
+namespace APIDesafioWarren.DomainService
 {
     public interface ICustomerServices
     { 

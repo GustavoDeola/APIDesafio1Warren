@@ -1,4 +1,4 @@
-using APIDesafioWarren.DataBase;
+using APIDesafioWarren.DomainService;
 using APIDesafioWarren.Validations;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -8,21 +8,22 @@ using System;
 using AppServices;
 using System.Reflection;
 using AutoMapper;
+using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var assemblie = new[] { Assembly.Load("App.Services") };
 builder.Services
     .AddControllers()
-    .AddFluentValidation(cfg =>
+    .AddFluentValidation(options =>
     {
-        cfg.RegisterValidatorsFromAssemblyContaining<CustomerValidator>();
+        options.RegisterValidatorsFromAssembly(assemblie.First());
     });
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSingleton<ICustomerServices, CustomerServices>();
 builder.Services.AddTransient<ICustomerAppService, CustomerAppService>();
-var assemblie = new[] { Assembly.Load("App.Services") };
 builder.Services.AddAutoMapper((_, mapperConfiguration) => mapperConfiguration.AddMaps(assemblie), assemblie);
 
 var app = builder.Build();

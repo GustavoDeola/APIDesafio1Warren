@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace APIDesafioWarren.DataBase
+namespace APIDesafioWarren.DomainService
 {
     public class CustomerServices : ICustomerServices
     {
@@ -32,8 +32,11 @@ namespace APIDesafioWarren.DataBase
         {
             int incrementId = _customersServices.LastOrDefault()?.Id ?? default;
 
+            if (ValidCPF(customer)) return -1;
+
             customer.Id = incrementId + 1;
             _customersServices.Add(customer);
+           
             return customer.Id;
         }
 
@@ -50,9 +53,13 @@ namespace APIDesafioWarren.DataBase
         {
             var cli = GetBy(c => c.Id == id);
             if (cli is null) return false;
-
             _customersServices.Remove(cli);
             return true;
         }
+
+        private bool ValidCPF(Customer customer)
+        {
+            return _customersServices.Any(c => c.Cpf == customer.Cpf);
+        } 
     }
 }

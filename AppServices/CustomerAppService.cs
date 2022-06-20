@@ -1,4 +1,4 @@
-﻿using APIDesafioWarren.DataBase;
+﻿using APIDesafioWarren.DomainService;
 using APIDesafioWarren.Models;
 using App.Services;
 using Application.Models.DTOs;
@@ -36,8 +36,9 @@ namespace AppServices
         public int Add(CreateCustomerRequest createcustomerRequest)
         {
             var mapper = _mapper.Map<Customer>(createcustomerRequest);
-            _customerService.Add(mapper);
-            return mapper.Id;
+            //_customerService.Add(mapper);
+            //return mapper.Id;
+            return _customerService.Add(mapper);
         }
 
         public bool Update(int id, UpdateCustomerRequest updateCustomerRequest)

@@ -95,9 +95,11 @@ namespace APIDesafioWarren.Controllers
         {
             return SafeAction(() =>
             {
-                var idcustomer = _customerAppService.Add(createCustomerRequest);
+                var idCustomer = _customerAppService.Add(createCustomerRequest);
 
-                return Created("~api/customer", $"Customer succefully registered! Your ID is: {idcustomer}");
+                return idCustomer == -1
+                ? BadRequest()
+                : Created("~api/customer", $"Customer succefully registered! Your ID is: {idCustomer}");
             });
         }
 

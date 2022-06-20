@@ -13,7 +13,6 @@ namespace AppServices.Helpers
             CreateMap<CreateCustomerRequest, Customer>();
             CreateMap<Customer, CustomerResponse>();
             CreateMap<UpdateCustomerRequest, Customer>();
-
         }
     }
 }
