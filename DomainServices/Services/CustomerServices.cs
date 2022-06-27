@@ -7,7 +7,7 @@ namespace APIDesafioWarren.DomainService
 {
     public class CustomerServices : ICustomerServices
     {
-        private readonly List<Customer> _customersServices = new List<Customer>();
+        private readonly List<Customer> _customersServices = new();
 
         public List<Customer> GetAll(Predicate<Customer> predicate = null)
         {
@@ -32,7 +32,7 @@ namespace APIDesafioWarren.DomainService
         {
             int incrementId = _customersServices.LastOrDefault()?.Id ?? default;
 
-            if (ValidCPF(customer)) return -1;
+            if (AnyCustomerForCpf(customer)) return -1;
 
             customer.Id = incrementId + 1;
             _customersServices.Add(customer);
@@ -51,13 +51,13 @@ namespace APIDesafioWarren.DomainService
 
         public bool Remove(int id)
         {
-            var cli = GetBy(c => c.Id == id);
-            if (cli is null) return false;
-            _customersServices.Remove(cli);
+            var customer = GetBy(c => c.Id == id);
+            if (customer is null) return false;
+            _customersServices.Remove(customer);
             return true;
         }
 
-        private bool ValidCPF(Customer customer)
+        private bool AnyCustomerForCpf(Customer customer)
         {
             return _customersServices.Any(c => c.Cpf == customer.Cpf);
         } 
