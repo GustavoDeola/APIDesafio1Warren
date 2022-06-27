@@ -12,6 +12,6 @@ namespace AppServices
         public int Add(CreateCustomerRequest createCustomerRequest);
         public bool Update(int id, UpdateCustomerRequest updateCustomerRequest);
         public bool Remove(int id);
-        Customer GetBy(Predicate<Customer> predicate);
+        CustomerResponse GetBy(Predicate<Customer> predicate);
     }
 }

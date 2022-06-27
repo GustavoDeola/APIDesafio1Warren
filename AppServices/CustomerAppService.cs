@@ -11,7 +11,6 @@ namespace AppServices
     public class CustomerAppService : ICustomerAppService
     {
         private readonly ICustomerServices _customerService;
-
         private readonly IMapper _mapper;
 
         public CustomerAppService(ICustomerServices customerService, IMapper mapper)
@@ -22,30 +21,28 @@ namespace AppServices
 
         public IEnumerable<CustomerResponse> GetAll(Predicate<Customer> predicate = null)
         {
-            var getAllCustomers = _customerService.GetAll(predicate);
-            return _mapper.Map<IEnumerable<CustomerResponse>>(getAllCustomers);
+            var customers = _customerService.GetAll(predicate);
+            return _mapper.Map<IEnumerable<CustomerResponse>>(customers);
         }
 
-        public Customer GetBy(Predicate<Customer> predicate)
+        public CustomerResponse GetBy(Predicate<Customer> predicate)
         {
-            var getCustomers = _customerService.GetBy(predicate);
-            var customerDTO = _mapper.Map<Customer>(getCustomers);
-            return customerDTO;
+            var customer = _customerService.GetBy(predicate);
+            var result = _mapper.Map<CustomerResponse>(customer);
+            return result;
         }
 
         public int Add(CreateCustomerRequest createcustomerRequest)
         {
             var mapper = _mapper.Map<Customer>(createcustomerRequest);
-            //_customerService.Add(mapper);
-            //return mapper.Id;
             return _customerService.Add(mapper);
         }
 
         public bool Update(int id, UpdateCustomerRequest updateCustomerRequest)
         {
-            var mapper = _mapper.Map<Customer>(updateCustomerRequest);
-            mapper.Id = id;
-            return _customerService.Update(mapper);
+            var customer = _mapper.Map<Customer>(updateCustomerRequest);
+            customer.Id = id;
+            return _customerService.Update(customer);
         }
 
         public bool Remove(int id)
