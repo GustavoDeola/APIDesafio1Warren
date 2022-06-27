@@ -1,43 +1,43 @@
 ﻿using System.Linq;
 
-namespace APIDesafioWarren.Validations
+namespace AppServices.Validations
 {
     public static class StringExtensions
     {
         public static bool ValidFullName(this string fullName)
         {
             string[] validSpaces = fullName.Trim().Split(' ');
-            
-            if (fullName.All(c => c.Equals(fullName.First()))) return false;
+            string copyFullName = fullName;
+            fullName = fullName.Trim();
 
-            else if (fullName.Trim() != fullName) return false;
-
-            else if (fullName.All(v => v.Equals(fullName.First(z => char.IsUpper(z))))) return false;
-
-            else if (fullName.All(x => char.IsLetter(x))) return true;
-
-            else if (validSpaces.Length > 0) return true;
+            if (AllCharacteresArentEqualsToTheFirstCharacter(fullName)
+                && fullName != copyFullName
+                && fullName.All(v => v.Equals(fullName.First(z => char.IsUpper(z))))
+                )
+            {
+                fullName.Replace(" ", "");
+                return fullName.All(x => char.IsLetter(x) && validSpaces.Length > 1);
+            }
 
             return false;
         }
-       
-        public static bool ValidCpf(this string cpf)
+
+        public static bool IsValidString(this string letter)
         {
-            if (cpf.All(c => c.Equals(cpf.First()))) return false;         
+            var anyInvalidCharacter = letter.Split(' ').Any(_ => !char.IsUpper(_.First()));
+            if (anyInvalidCharacter) return false;
+
+            if (!AllCharacteresArentEqualsToTheFirstCharacter(letter)
+                || letter.Trim() != letter
+                || letter.Split(' ').Contains("")
+                || letter.Replace(" ", string.Empty).Any(x => !char.IsLetter(x))) return false;
 
             return true;
         }
 
-        public static bool ValidPostalCode(this string postalcode)
+        public static bool AllCharacteresArentEqualsToTheFirstCharacter(this string word)
         {
-            if (postalcode.All(c => c.Equals(postalcode.First()))) return false;
-            return true;
-        }
-
-        public static bool ValidCellphone(this string cellphone)
-        {
-            if (cellphone.All(c => c.Equals(cellphone.First()))) return false;
-            return true;
+            return !word.All(c => c.Equals(word.First()));
         }
     }
 }
