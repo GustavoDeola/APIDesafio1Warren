@@ -1,30 +1,27 @@
 using APIDesafioWarren.DomainService;
-using APIDesafioWarren.Validations;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 using AppServices;
 using System.Reflection;
-using AutoMapper;
 using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var assemblie = new[] { Assembly.Load("App.Services") };
+var assemblies = new[] { Assembly.Load("App.Services") };
 builder.Services
     .AddControllers()
     .AddFluentValidation(options =>
     {
-        options.RegisterValidatorsFromAssembly(assemblie.First());
+        options.RegisterValidatorsFromAssembly(assemblies.First());
     });
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSingleton<ICustomerServices, CustomerServices>();
 builder.Services.AddTransient<ICustomerAppService, CustomerAppService>();
-builder.Services.AddAutoMapper((_, mapperConfiguration) => mapperConfiguration.AddMaps(assemblie), assemblie);
+builder.Services.AddAutoMapper((_, mapperConfiguration) => mapperConfiguration.AddMaps(assemblies), assemblies);
 
 var app = builder.Build();
 

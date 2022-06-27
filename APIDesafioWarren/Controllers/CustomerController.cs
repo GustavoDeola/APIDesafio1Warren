@@ -15,10 +15,9 @@ namespace APIDesafioWarren.Controllers
     {
         private readonly ICustomerAppService _customerAppService;
 
-        public CustomersController(ICustomerAppService appServices, IMapper mapper)
+        public CustomersController(ICustomerAppService customerAppService)
         {
-            _customerAppService = appServices ?? throw new ArgumentNullException(nameof(appServices));
-
+            _customerAppService = customerAppService ?? throw new ArgumentNullException(nameof(customerAppService));
         }
 
         [HttpGet]
@@ -49,12 +48,12 @@ namespace APIDesafioWarren.Controllers
         }
 
         [HttpGet("full-name/{fullname}")]
-        public IActionResult GetByFullName(string fullname)
+        public IActionResult GetByFullName(string fullName)
         {
             return SafeAction(() =>
             {
                 var customer = _customerAppService
-                    .GetAll(c => c.FullName == fullname);
+                    .GetAll(c => c.FullName == fullName);
 
                 return customer.Count() is 0
                     ? NotFound("Customer not found!")
@@ -62,7 +61,7 @@ namespace APIDesafioWarren.Controllers
             });
         }
 
-        [HttpGet("Byemail/{email}")]
+        [HttpGet("email/{email}")]
         public IActionResult GetByEmail(string email)
         {
             return SafeAction(() =>
@@ -76,15 +75,15 @@ namespace APIDesafioWarren.Controllers
             });
         }
 
-        [HttpGet("Bycpf/{cpf}")]
+        [HttpGet("cpf/{cpf}")]
         public IActionResult GetByCpf(string cpf)
         {
             return SafeAction(() =>
             {
                 var customer = _customerAppService
-                    .GetAll(c => c.Equals(cpf));
+                    .GetBy(c => c.Cpf.Equals(cpf));
 
-                return customer.Count() is 0
+                return customer is null
                     ? NotFound("Customer not found!")
                     : Ok(customer);
             });
@@ -95,11 +94,11 @@ namespace APIDesafioWarren.Controllers
         {
             return SafeAction(() =>
             {
-                var idCustomer = _customerAppService.Add(createCustomerRequest);
+                var customerId = _customerAppService.Add(createCustomerRequest);
 
-                return idCustomer == -1
+                return customerId == -1
                 ? BadRequest()
-                : Created("~api/customer", $"Customer succefully registered! Your ID is: {idCustomer}");
+                : Created("~api/customer", $"Customer succefully registered! Your ID is: {customerId}");
             });
         }
 
@@ -124,6 +123,7 @@ namespace APIDesafioWarren.Controllers
                  : NoContent();
             });
         }
+
         private IActionResult SafeAction(Func<IActionResult> action)
         {
             try
@@ -142,8 +142,3 @@ namespace APIDesafioWarren.Controllers
         }
     }
 }
-
-
-
-
-
