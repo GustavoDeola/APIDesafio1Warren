@@ -22,6 +22,15 @@ namespace AppServices.Validations
             return false;
         }
 
+        public static bool ValidCPF(this string cpf)
+        {
+            cpf = cpf.Trim().Replace(".", "").Replace("-", "").Substring(0, 9);
+            int sum = 0;
+
+            foreach (char c in cpf)
+                sum += cpf
+        }
+
         public static bool IsValidString(this string letter)
         {
 
@@ -32,6 +41,11 @@ namespace AppServices.Validations
                 || letter.Replace(" ", string.Empty).Any(x => !char.IsLetter(x))) return false;
 
             return true;
+        }
+
+        public static bool IsValidNumber(this string number)
+        {
+            return number.All(x => char.IsDigit(x));
         }
 
         public static bool AllCharacteresArentEqualsToTheFirstCharacter(this string word)
