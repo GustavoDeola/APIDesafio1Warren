@@ -24,12 +24,11 @@ namespace AppServices.Validations
 
         public static bool IsValidString(this string letter)
         {
-            var anyInvalidCharacter = letter.Split(' ').Any(_ => !char.IsUpper(_.First()));
-            if (anyInvalidCharacter) return false;
 
             if (!AllCharacteresArentEqualsToTheFirstCharacter(letter)
                 || letter.Trim() != letter
                 || letter.Split(' ').Contains("")
+                || letter.Split(' ').Any(_ => !char.IsUpper(_.First()))
                 || letter.Replace(" ", string.Empty).Any(x => !char.IsLetter(x))) return false;
 
             return true;
