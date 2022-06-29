@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace AppServices.Validations
 {
@@ -6,35 +7,23 @@ namespace AppServices.Validations
     {
         public static bool ValidFullName(this string fullName)
         {
-            string[] validSpaces = fullName.Trim().Split(' ');
-            string copyFullName = fullName;
-            fullName = fullName.Trim();
-
-            if (AllCharacteresArentEqualsToTheFirstCharacter(fullName)
-                && fullName != copyFullName
-                && fullName.All(v => v.Equals(fullName.First(z => char.IsUpper(z))))
-                )
-            {
-                fullName.Replace(" ", "");
-                return fullName.All(x => char.IsLetter(x) && validSpaces.Length > 1);
-            }
-
-            return false;
+            if (IsValidString(fullName)) return false; 
+               
+            return true;
         }
 
-        public static bool ValidCPF(this string cpf)
+        public static int ToIntAt(this string value, Index index)
         {
-            cpf = cpf.Trim().Replace(".", "").Replace("-", "").Substring(0, 9);
-            int sum = 0;
+            var indexValue = index.IsFromEnd
+                ? value.Length - index.Value
+                : index.Value;
 
-            foreach (char c in cpf)
-                sum += cpf
+            return (int)char.GetNumericValue(value, indexValue);
         }
 
         public static bool IsValidString(this string letter)
         {
-
-            if (!AllCharacteresArentEqualsToTheFirstCharacter(letter)
+            if (AllCharacteresArentEqualsToTheFirstCharacter(letter)
                 || letter.Trim() != letter
                 || letter.Split(' ').Contains("")
                 || letter.Split(' ').Any(_ => !char.IsUpper(_.First()))

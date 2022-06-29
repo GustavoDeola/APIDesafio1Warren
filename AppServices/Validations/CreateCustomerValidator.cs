@@ -12,8 +12,7 @@ namespace AppServices.Validations
         {
             RuleFor(c => c.FullName)
                 .NotEmpty()
-                //.Must(v => v.ValidFullName())
-                .Must(v => v.IsValidString())
+                .Must(v => v.ValidFullName())
                 .MaximumLength(300)
                 .MinimumLength(6);
 
@@ -28,7 +27,7 @@ namespace AppServices.Validations
 
             RuleFor(c => c.Cpf)
                 .NotEmpty()
-                .Must(v => v.AllCharacteresArentEqualsToTheFirstCharacter())
+                .Must(ValidCPF)
                 .Length(11);
 
             RuleFor(c => c.Country)
@@ -76,6 +75,34 @@ namespace AppServices.Validations
             return false;
         }
 
+        private static bool ValidCPF(string cpf)
+        {
+            cpf = cpf.Replace(".", string.Empty).Replace("-", string.Empty);
+
+            if (!cpf.IsValidNumber()) return false;
+
+            if (cpf.AllCharacteresArentEqualsToTheFirstCharacter()) return false;
+
+            var firstDigitAfterDash = 0;
+            for (int i = 0; i < cpf.Length - 2; i++)
+            {
+                firstDigitAfterDash += cpf.ToIntAt(i) * (10 - i);
+            }
+
+            firstDigitAfterDash = (firstDigitAfterDash * 10) % 11;
+            firstDigitAfterDash = firstDigitAfterDash == 10 ? 0 : firstDigitAfterDash;
+
+            var secondDigitAfterDash = 0;
+            for (int i = 0; i < cpf.Length - 1; i++)
+            {
+                secondDigitAfterDash += cpf.ToIntAt(i) * (11 - i);
+            }
+
+            secondDigitAfterDash = (secondDigitAfterDash * 10) % 11;
+            secondDigitAfterDash = secondDigitAfterDash == 10 ? 0 : secondDigitAfterDash;
+
+            return firstDigitAfterDash == cpf.ToIntAt(^2) && secondDigitAfterDash == cpf.ToIntAt(^1);
+        }
         private static bool ValidBirthDate(DateTime birthdate)
         {
             var s = new DateTime(DateTime.Now.Year, birthdate.Month, birthdate.Day);
