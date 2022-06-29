@@ -7,8 +7,8 @@ namespace AppServices.Validations
     {
         public static bool ValidFullName(this string fullName)
         {
-            if (IsValidString(fullName)) return false; 
-               
+            if (IsValidString(fullName)) return false;   
+            
             return true;
         }
 

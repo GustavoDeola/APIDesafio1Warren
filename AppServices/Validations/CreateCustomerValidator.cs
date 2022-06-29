@@ -29,14 +29,16 @@ namespace AppServices.Validations
                 .NotEmpty()
                 .Must(ValidCPF)
                 .Length(11);
-
+                
             RuleFor(c => c.Country)
                 .NotEmpty()
+                .Must(v => v.AllCharacteresArentEqualsToTheFirstCharacter())
                 .MaximumLength(35)
                 .MinimumLength(5);
 
             RuleFor(c => c.City)
                 .NotEmpty()
+                .Must(v => v.AllCharacteresArentEqualsToTheFirstCharacter())
                 .MaximumLength(40)
                 .MinimumLength(3);
 
@@ -55,11 +57,12 @@ namespace AppServices.Validations
 
             RuleFor(c => c.PostalCode)
                 .NotEmpty()
-                .Must(v => v.AllCharacteresArentEqualsToTheFirstCharacter())
+                .Must(v => v.IsValidNumber())
                 .Length(8);
 
             RuleFor(c => c.Address)
              .NotEmpty()
+             .Must(v => v.IsValidString())
              .WithMessage("Please complete this field");
 
             RuleFor(c => c.Number)
@@ -81,7 +84,7 @@ namespace AppServices.Validations
 
             if (!cpf.IsValidNumber()) return false;
 
-            if (cpf.AllCharacteresArentEqualsToTheFirstCharacter()) return false;
+            if (!cpf.AllCharacteresArentEqualsToTheFirstCharacter()) return false;
 
             var firstDigitAfterDash = 0;
             for (int i = 0; i < cpf.Length - 2; i++)
