@@ -1,7 +1,6 @@
 ﻿using App.Services;
 using Application.Models.DTOs;
 using AppServices;
-using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;

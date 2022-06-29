@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Application.Models.DTOs
+﻿namespace Application.Models.DTOs
 {
     public class CustomerResponse
     {
