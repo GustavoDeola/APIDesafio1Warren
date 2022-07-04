@@ -1,12 +1,13 @@
 ﻿using APIDesafioWarren.DomainService;
 using APIDesafioWarren.Models;
-using App.Services;
-using Application.Models.DTOs;
+using Application;
+using Application.Models.Requests;
+using Application.Models.Response;
 using AutoMapper;
 using System;
 using System.Collections.Generic;
 
-namespace AppServices
+namespace Application
 {
     public class CustomerAppService : ICustomerAppService
     {

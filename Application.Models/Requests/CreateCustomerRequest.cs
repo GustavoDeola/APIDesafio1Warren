@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace App.Services
+namespace Application.Models.Requests
 {
     public class CreateCustomerRequest
-    { 
+    {
         public string FullName { get; set; }
         public string Email { get; set; }
         public string EmailConfirmation { get; set; }

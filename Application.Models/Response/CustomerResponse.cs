@@ -1,4 +1,4 @@
-﻿namespace Application.Models.DTOs
+﻿namespace Application.Models.Response
 {
     public class CustomerResponse
     {

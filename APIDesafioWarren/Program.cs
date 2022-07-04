@@ -3,13 +3,13 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using AppServices;
+using Application;
 using System.Reflection;
 using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var assemblies = new[] { Assembly.Load("App.Services") };
+var assemblies = new[] { Assembly.Load("Application") };
 builder.Services
     .AddControllers()
     .AddFluentValidation(options =>

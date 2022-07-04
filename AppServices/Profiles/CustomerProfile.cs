@@ -1,10 +1,9 @@
 ﻿using APIDesafioWarren.Models;
-using App.Services;
-using Application.Models.DTOs;
+using Application.Models.Requests;
 using AutoMapper;
-using System.Collections.Generic;
+using Application.Models.Response;
 
-namespace AppServices.Helpers
+namespace Application.Profiles
 {
     public class CustomerProfile : Profile
     {
