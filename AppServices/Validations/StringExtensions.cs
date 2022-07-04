@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Linq;
 
-namespace AppServices.Validations
+namespace Application.Validations
 {
     public static class StringExtensions
     {
         public static bool ValidFullName(this string fullName)
         {
-            if (IsValidString(fullName)) return false;   
-            
-            return true;
+            string[] limitStrings = fullName.Split(' ');
+
+            if (IsValidString(fullName)) return false;
+
+            return limitStrings.Length > 1 && limitStrings.Length < 7;
         }
 
         public static int ToIntAt(this string value, Index index)

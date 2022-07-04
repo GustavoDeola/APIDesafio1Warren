@@ -1,10 +1,9 @@
-﻿using APIDesafioWarren.Models;
-using App.Services;
+﻿using Application.Models.Requests;
 using FluentValidation;
 using FluentValidation.Validators;
 using System;
 
-namespace AppServices.Validations
+namespace Application.Validations
 {
     public class CreateCustomerValidator : AbstractValidator<CreateCustomerRequest>
     {
@@ -44,13 +43,10 @@ namespace AppServices.Validations
 
             RuleFor(c => c.Cellphone)
                .NotEmpty()
-               .WithMessage("Please complete this field")
                .Must(v => v.AllCharacteresArentEqualsToTheFirstCharacter())
                .MinimumLength(10)
-               .WithMessage("Invalid cellphone")
-               .MaximumLength(11)
-               .WithMessage("Invalid cellphone");
-
+               .MaximumLength(11);
+               
             RuleFor(c => c.Birthdate)
                 .Must(ValidBirthDate)
                 .WithMessage("You must be at least 16 years old");
@@ -58,24 +54,18 @@ namespace AppServices.Validations
             RuleFor(c => c.PostalCode)
                 .NotEmpty()
                 .Must(v => v.IsValidNumber())
-                .Length(8);
+                .MinimumLength(8)
+                .MaximumLength(9);
 
             RuleFor(c => c.Address)
              .NotEmpty()
              .Must(v => v.IsValidString())
-             .WithMessage("Please complete this field");
+             .MinimumLength(2)
+             .MaximumLength(100);
 
             RuleFor(c => c.Number)
                 .NotEmpty()
-                .WithMessage("Please complete this field");
-        }
-        public static bool ValidEmail(Customer client)
-        {
-            if (client.EmailConfirmation == client.Email)
-            {
-                return true;
-            }
-            return false;
+                .GreaterThan(0);
         }
 
         private static bool ValidCPF(string cpf)
@@ -106,12 +96,17 @@ namespace AppServices.Validations
 
             return firstDigitAfterDash == cpf.ToIntAt(^2) && secondDigitAfterDash == cpf.ToIntAt(^1);
         }
+
         private static bool ValidBirthDate(DateTime birthdate)
         {
-            var s = new DateTime(DateTime.Now.Year, birthdate.Month, birthdate.Day);
-            var yearsDifference = s.Year - birthdate.Year;
+            var today = DateTime.Now;
 
-            return yearsDifference >= 16;
+            int age = today.Year - birthdate.Year;
+
+            if (today.Month < birthdate.Month || (today.Month == birthdate.Month && today.Day < birthdate.Day))
+                age--;
+
+            return age > 16;
         }
     }
 }
