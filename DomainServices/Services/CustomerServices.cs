@@ -1,9 +1,9 @@
-﻿using APIDesafioWarren.Models;
+﻿using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace APIDesafioWarren.DomainService
+namespace Domain.Services.Services
 {
     public class CustomerServices : ICustomerServices
     {
@@ -36,7 +36,7 @@ namespace APIDesafioWarren.DomainService
 
             customer.Id = incrementId + 1;
             _customers.Add(customer);
-           
+
             return customer.Id;
         }
 
@@ -60,6 +60,6 @@ namespace APIDesafioWarren.DomainService
         private bool AnyCustomerForCpf(Customer customer)
         {
             return _customers.Any(c => c.Cpf == customer.Cpf);
-        } 
+        }
     }
 }

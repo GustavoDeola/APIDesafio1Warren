@@ -110,5 +110,3 @@ namespace Application.Validations
         }
     }
 }
-
-
