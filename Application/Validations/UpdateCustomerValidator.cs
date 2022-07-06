@@ -105,7 +105,6 @@ namespace Application.Validations
                 age--;
 
             return age > 16;
-
         }
     }
 }
