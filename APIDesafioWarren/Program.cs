@@ -4,22 +4,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
 using System.Linq;
+
 using Application;
 using Domain.Services.Services;
-using Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var assemblies = new[] { Assembly.Load("Application") };
 builder.Services
-    .AddDbContext<APIDesafioWarrenDbContext>(options =>
-    {
-        options.UseMySql(builder.Configuration.GetConnectionString("Default"),
-        Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.29-mysql"),
-        b => b.MigrationsAssembly("Infrastructure"));
-    })
     .AddControllers()
     .AddFluentValidation(options =>
     {

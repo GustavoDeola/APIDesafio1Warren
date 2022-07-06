@@ -1,11 +1,11 @@
-﻿using Domain.Models;
+﻿using APIDesafioWarren.Models;
 using System;
 using System.Collections.Generic;
 
-namespace Domain.Services.Services
+namespace APIDesafioWarren.DomainService
 {
     public interface ICustomerServices
-    {
+    { 
         List<Customer> GetAll(Predicate<Customer> predicate = null);
         public int Add(Customer customer);
         public bool Update(Customer customerToUpdate);
