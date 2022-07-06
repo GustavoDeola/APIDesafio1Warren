@@ -97,10 +97,15 @@ namespace Application.Validations
 
         private static bool ValidBirthDate(DateTime birthdate)
         {
-            var s = new DateTime(DateTime.Now.Year, birthdate.Month, birthdate.Day);
-            var yearsDifference = s.Year - birthdate.Year;
+            var today = DateTime.Now;
 
-            return yearsDifference >= 16;
+            int age = today.Year - birthdate.Year;
+
+            if (today.Month < birthdate.Month || (today.Month == birthdate.Month && today.Day < birthdate.Day))
+                age--;
+
+            return age > 16;
+
         }
     }
 }
