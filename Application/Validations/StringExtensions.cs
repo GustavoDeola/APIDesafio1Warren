@@ -9,7 +9,7 @@ namespace Application.Validations
         {
             string[] limitStrings = fullName.Split(' ');
 
-            if (IsValidString(fullName)) return false;
+            if (!IsValidString(fullName)) return false;
 
             return limitStrings.Length > 1 && limitStrings.Length < 7;
         }
@@ -25,12 +25,12 @@ namespace Application.Validations
 
         public static bool IsValidString(this string letter)
         {
-            if (AllCharacteresArentEqualsToTheFirstCharacter(letter)
+            if (!letter.Replace(" ", string.Empty).AllCharacteresArentEqualsToTheFirstCharacter()
                 || letter.Trim() != letter
                 || letter.Split(' ').Contains("")
                 || letter.Split(' ').Any(_ => !char.IsUpper(_.First()))
                 || letter.Replace(" ", string.Empty).Any(x => !char.IsLetter(x))) return false;
-
+                  
             return true;
         }
 

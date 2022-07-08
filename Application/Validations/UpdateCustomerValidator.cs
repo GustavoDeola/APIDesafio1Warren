@@ -9,7 +9,7 @@ namespace Application.Validations
     {
         public UpdateCustomerValidator()
         {
-            RuleFor(c => c.FullName)
+            RuleFor(c => c.Fullname)
                 .NotEmpty()
                 .Must(v => v.ValidFullName())
                 .MaximumLength(300)
@@ -41,7 +41,7 @@ namespace Application.Validations
 
             RuleFor(c => c.Cellphone)
                .NotEmpty()
-               .Must(v => v.AllCharacteresArentEqualsToTheFirstCharacter())
+               .Must(v => v.IsValidNumber())
                .MinimumLength(10)
                .MaximumLength(11);
                

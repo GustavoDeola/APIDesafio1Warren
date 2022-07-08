@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace APIDesafioWarren.Models
+namespace Domain.Models
 {
     public class Customer
     {

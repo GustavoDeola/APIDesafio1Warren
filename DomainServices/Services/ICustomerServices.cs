@@ -1,8 +1,8 @@
-﻿using APIDesafioWarren.Models;
+﻿using Domain.Models;
 using System;
 using System.Collections.Generic;
 
-namespace APIDesafioWarren.DomainService
+namespace Domain.Services
 {
     public interface ICustomerServices
     { 

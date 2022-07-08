@@ -4,9 +4,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
 using System.Linq;
-
 using Application;
-using Domain.Services.Services;
+using Domain.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Infrastructure.Data.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,11 @@ builder.Services
     {
         options.RegisterValidatorsFromAssembly(assemblies.First());
     });
+
+builder.Services.AddDbContext<Context>(options => 
+        options.UseMySql(builder.Configuration.GetConnectionString("dbAPIWarren"), 
+        ServerVersion.Parse("8.0.29-mysql"),
+        b => b.MigrationsAssembly("Infrastructure.Data")));
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
