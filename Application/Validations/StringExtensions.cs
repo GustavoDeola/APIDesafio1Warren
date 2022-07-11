@@ -30,7 +30,7 @@ namespace Application.Validations
                 || letter.Split(' ').Contains("")
                 || letter.Split(' ').Any(_ => !char.IsUpper(_.First()))
                 || letter.Replace(" ", string.Empty).Any(x => !char.IsLetter(x))) return false;
-                  
+
             return true;
         }
 
