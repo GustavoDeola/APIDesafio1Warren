@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <UserSecretsId>48526aae-602b-4471-988c-25ffc4d03b65</UserSecretsId>
+    <UserSecretsId>4d2d2c0c-64b4-44c0-a2df-bc639514ca17</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>

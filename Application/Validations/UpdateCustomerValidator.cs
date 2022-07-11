@@ -41,7 +41,7 @@ namespace Application.Validations
 
             RuleFor(c => c.Cellphone)
                .NotEmpty()
-               .Must(v => v.IsValidNumber())
+               .Must(v => v.AllCharacteresArentEqualsToTheFirstCharacter())
                .MinimumLength(10)
                .MaximumLength(11);
                

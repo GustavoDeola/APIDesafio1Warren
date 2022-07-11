@@ -3,9 +3,9 @@ using Application.Models.Requests;
 using Application.Models.Response;
 using AutoMapper;
 using Domain.Models;
+using Domain.Services;
 using System;
 using System.Collections.Generic;
-using Domain.Services;
 
 namespace Application
 {
