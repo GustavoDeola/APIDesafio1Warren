@@ -9,7 +9,7 @@ namespace Application.Validations
     {
         public CreateCustomerValidator()
         {
-            RuleFor(c => c.Fullname)
+            RuleFor(c => c.FullName)
                 .NotEmpty()
                 .Must(v => v.ValidFullName())
                 .MaximumLength(300)

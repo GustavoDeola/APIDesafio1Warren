@@ -4,7 +4,7 @@ namespace Application.Models.Requests
 {
     public class UpdateCustomerRequest 
     {
-        public string Fullname { get; set; }
+        public string FullName { get; set; }
         public string Email { get; set; }
         public string Cpf { get; set; }
         public string Cellphone { get; set; }
