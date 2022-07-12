@@ -1,14 +1,12 @@
 ﻿using System;
 
-namespace APIDesafioWarren.Models
+namespace Domain.Models
 {
     public class Customer
     {
         public Customer(
-            int id,
             string fullname,
             string email,
-            string emailConfirmation,
             string cpf,
             string cellphone,
             DateTime birthdate,
@@ -21,10 +19,8 @@ namespace APIDesafioWarren.Models
             int number
         )
         {
-            Id = id;
             FullName = fullname;
             Email = email;
-            EmailConfirmation = emailConfirmation;
             Cpf = cpf;
             Cellphone = cellphone;
             Birthdate = birthdate;

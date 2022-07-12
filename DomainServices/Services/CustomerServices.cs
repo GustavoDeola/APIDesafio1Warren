@@ -1,13 +1,14 @@
-﻿using APIDesafioWarren.Models;
+﻿
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace APIDesafioWarren.DataBase
+namespace Domain.Services
 {
     public class CustomerServices : ICustomerServices
     {
-        private readonly List<Customer> _customers = new List<Customer>();
+        private readonly List<Customer> _customers = new();
 
         public List<Customer> GetAll(Predicate<Customer> predicate = null)
         {
@@ -15,55 +16,51 @@ namespace APIDesafioWarren.DataBase
             {
                 return _customers;
             }
-            var findCustomers = _customers.FindAll(predicate);
+            var customers = _customers.FindAll(predicate);
 
-            return findCustomers.Count is 0
+            return customers.Count is 0
                 ? null
-                : findCustomers;
+                : customers;
         }
 
         public Customer GetBy(Predicate<Customer> predicate)
-        {    
+        {
             var customer = _customers.Find(predicate);
             return customer;
         }
 
-        public void Add(Customer customer)
+        public int Add(Customer customer)
         {
             int incrementId = _customers.LastOrDefault()?.Id ?? default;
-           
+
+            if (AnyCustomerForCpf(customer)) return -1;
+
             customer.Id = incrementId + 1;
             _customers.Add(customer);
+           
+            return customer.Id;
         }
 
-        public bool Update(int id, Customer customerChange)
+        public bool Update(Customer customerChange)
         {
-            var customer = GetBy(c => c.Id == id);
+            var findCustomers = _customers.FindIndex(c => c.Id == customerChange.Id);
+            if (findCustomers == -1) return false;
 
-            if (customer is null) return false;
-            
-            customerChange.FullName = customer.FullName;
-            customerChange.Email = customer.Email;
-            customerChange.EmailConfirmation = customer.EmailConfirmation;
-            customerChange.Cpf = customer.Cpf;
-            customerChange.EmailSms = customer.EmailSms;
-            customerChange.Cellphone = customer.Cellphone;
-            customerChange.Country = customer.Country;
-            customerChange.City = customer.City;
-            customerChange.PostalCode = customer.PostalCode;
-            customerChange.Address = customer.Address;
-            customerChange.Number = customer.Number;
-            customerChange.Whatsapp = customer.Whatsapp;
-                return true;
+            _customers[findCustomers] = customerChange;
+            return true;
         }
 
         public bool Remove(int id)
         {
-            var cli = GetBy(c => c.Id == id);
-            if (cli is null) return false;
-
-            _customers.Remove(cli);
+            var customer = GetBy(c => c.Id == id);
+            if (customer is null) return false;
+            _customers.Remove(customer);
             return true;
         }
+
+        private bool AnyCustomerForCpf(Customer customer)
+        {
+            return _customers.Any(c => c.Cpf == customer.Cpf);
+        } 
     }
 }

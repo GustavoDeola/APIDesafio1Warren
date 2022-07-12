@@ -1,14 +1,15 @@
-﻿using APIDesafioWarren.Models;
+﻿
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 
-namespace APIDesafioWarren.DataBase
+namespace Domain.Services
 {
     public interface ICustomerServices
     { 
         List<Customer> GetAll(Predicate<Customer> predicate = null);
-        public void Add(Customer client);
-        public bool Update(int id, Customer clientChange);
+        public int Add(Customer customer);
+        public bool Update(Customer customerToUpdate);
         public bool Remove(int id);
         Customer GetBy(Predicate<Customer> predicate);
     }

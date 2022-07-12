@@ -1,11 +1,9 @@
-﻿using APIDesafioWarren.DataBase;
-using APIDesafioWarren.Models;
-using APIDesafioWarren.Validations;
-using Domain_Models.Dtos;
+﻿using Application;
+using Application.Models.Requests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace APIDesafioWarren.Controllers
 {
@@ -13,11 +11,11 @@ namespace APIDesafioWarren.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        private readonly ICustomerServices _customerServices;
+        private readonly ICustomerAppService _customerAppService;
 
-        public CustomersController(ICustomerServices database)
+        public CustomersController(ICustomerAppService customerAppService)
         {
-            _customerServices = database;
+            _customerAppService = customerAppService ?? throw new ArgumentNullException(nameof(customerAppService));
         }
 
         [HttpGet]
@@ -25,13 +23,11 @@ namespace APIDesafioWarren.Controllers
         {
             return SafeAction(() =>
             {
-               var findCustomers = _customerServices.GetAll();
+                var findCustomers = _customerAppService.GetAll();
 
-               return findCustomers.Count is 0 
-                   ? Ok()
-                   : Ok(findCustomers);
-
-                var returnCustomers = new List<CustomerDto>();
+                return findCustomers.Count() is 0
+                    ? NotFound()
+                    : Ok(findCustomers);
             });
         }
 
@@ -40,206 +36,78 @@ namespace APIDesafioWarren.Controllers
         {
             return SafeAction(() =>
             {
-                var customer = _customerServices
+                var customer = _customerAppService
                     .GetBy(x => x.Id.Equals(id));
 
-                return customer is null 
+                return customer is null
                     ? NotFound($"Customer not found! for id: {id}")
                     : Ok(customer);
             });
         }
 
-        [HttpGet("Byfullname/{fullname}")]
-        public IActionResult GetByfullname(string fullname)
+        [HttpGet("full-name/{fullname}")]
+        public IActionResult GetByFullName(string fullName)
         {
             return SafeAction(() =>
             {
-                var customer = _customerServices
-                    .GetAll(c => c.FullName == fullname);
+                var customer = _customerAppService
+                    .GetAll(c => c.FullName == fullName);
 
-                return customer.Count is 0 
+                return customer.Count() is 0
                     ? NotFound("Customer not found!")
                     : Ok(customer);
             });
         }
 
-        [HttpGet("Byemail/{email}")]
-        public IActionResult GetByemail(string email)
+        [HttpGet("email/{email}")]
+        public IActionResult GetByEmail(string email)
         {
             return SafeAction(() =>
             {
-                var customer = _customerServices
+                var customer = _customerAppService
                         .GetAll(c => c.Email == email);
 
-                return customer.Count is 0 
+                return customer.Count() is 0
                     ? NotFound("Customer not found!")
                     : Ok(customer);
             });
         }
 
-        [HttpGet("Bybirthdate/{birthdate}")]
-        public IActionResult GetBybirthdate(DateTime birthdate)
+        [HttpGet("cpf/{cpf}")]
+        public IActionResult GetByCpf(string cpf)
         {
             return SafeAction(() =>
             {
-                var customer = _customerServices
-                   .GetAll(c => c.Birthdate == birthdate);
+                var customer = _customerAppService
+                    .GetBy(c => c.Cpf.Equals(cpf));
 
-                return customer.Count is 0 
-                    ? NotFound("Customer not found!")
-                    : Ok(customer);
-            });
-        }
-
-        [HttpGet("Bycpf/{cpf}")]
-        public IActionResult GetBycpf(string cpf)
-        {
-            return SafeAction(() =>
-            {
-                var customer = _customerServices
-                    .GetAll(c => c.Equals(cpf));
-
-                return customer.Count is 0 
-                    ? NotFound("Customer not found!")
-                    : Ok(customer);
-            });
-        }
-
-        [HttpGet("Bycellphone/{cellphone}")]
-        public IActionResult GetBycellphone(string cellphone)
-        {
-            return SafeAction(() =>
-            {
-                var customer = _customerServices
-                    .GetAll(c => c.Cellphone == cellphone);
-
-                return customer.Count is 0 
-                    ? NotFound("Customer not found!")
-                    : Ok(customer);
-            });
-        }
-
-        [HttpGet("ByemailSms/{emailSms}")]
-        public IActionResult GetByemailsms(bool emailSms)
-        {
-            return SafeAction(() =>
-            {
-                var customer = _customerServices
-                     .GetAll(c => c.EmailSms == emailSms);
-
-                return customer.Count is 0 
-                    ? NotFound("Customer not found!")
-                    : Ok(customer);
-            });
-        }
-
-        [HttpGet("Bywhatsapp/{whatsapp}")]
-        public IActionResult GetBywhatsapp(bool whatsapp)
-        {
-            return SafeAction(() =>
-           {
-               var customer = _customerServices
-                      .GetAll(c => c.Whatsapp == whatsapp);
-
-               return customer.Count is 0
-                    ? NotFound("Customer not found!")
-                    : Ok(customer);
-           });
-        }
-
-        [HttpGet("Bycountry/{country}")]
-
-        public IActionResult GetBycountry(string country)
-        {
-            return SafeAction(() =>
-            {
-                var customer = _customerServices
-                        .GetAll(c => c.Country == country);
-
-                return customer.Count is 0 
-                    ? NotFound("Customer not found!")
-                    : Ok(customer);
-            });
-        }
-
-        [HttpGet("Bycity/{city}")]
-        public IActionResult GetBycity(string city)
-        {
-            return SafeAction(() =>
-            {
-                var customer = _customerServices
-                        .GetAll(c => c.City == city);
-
-                return customer.Count is 0 
-                    ? NotFound ("Customer not found!!")
-                    : Ok(customer);
-            });
-        }
-
-        [HttpGet("Bypostalcode/{postalcode}")]
-        public IActionResult GetBypostalcode(string postalcode)
-        {
-            return SafeAction(() =>
-            {
-                var customer = _customerServices
-                        .GetAll(c => c.PostalCode == postalcode);
-
-                return customer.Count is 0 
-                    ? NotFound("Customer not found!")
-                    : Ok(customer);
-            });
-        }
-
-        [HttpGet("Byadress/{adress}")]
-
-        public IActionResult GetByadress(string adress)
-        {
-            var customer = _customerServices
-                    .GetAll(c => c.Address == adress);
-
-            return customer.Count is 0 
-                    ? NotFound("Customer not found!!")
-                    : Ok(customer);
-        }
-
-        [HttpGet("Bynumber/{number}")]
-        public IActionResult GetBynumber(int number)
-        {
-            return SafeAction(() =>
-            {
-                var customer = _customerServices
-                        .GetAll(c => c.Number == number);
-
-                return customer.Count is 0 
+                return customer is null
                     ? NotFound("Customer not found!")
                     : Ok(customer);
             });
         }
 
         [HttpPost]
-        public IActionResult Post(Customer customer)
+        public IActionResult Post(CreateCustomerRequest createCustomerRequest)
         {
             return SafeAction(() =>
             {
-                if (CustomerValidator.ValidEmail(customer))
-                {
-                    _customerServices.Add(customer);
+                var customerId = _customerAppService.Add(createCustomerRequest);
 
-                    return Created("~api/customer", $"Customer succefully registered! Your ID is: {customer.Id}");
-                }
-
-                return BadRequest("Email invalid");
+                return customerId == -1
+                ? BadRequest()
+                : Created("~api/customer", $"Customer succefully registered! Your ID is: {customerId}");
             });
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, Customer customer)
+        public IActionResult Put(int id, UpdateCustomerRequest updateCustomerRequest)
         {
             return SafeAction(() =>
             {
-                return !_customerServices.Update(id, customer)
+                return !_customerAppService.Update(id, updateCustomerRequest)
                 ? NotFound($"Customer not found for Id: {id}")
-                : Ok(customer);
+                : Ok("Customer sucessfully updated!");
             });
         }
 
@@ -248,11 +116,12 @@ namespace APIDesafioWarren.Controllers
         {
             return SafeAction(() =>
             {
-                return !_customerServices.Remove(id)
+                return !_customerAppService.Remove(id)
                  ? NotFound($"Customer not found for Id: {id}")
                  : NoContent();
             });
         }
+
         private IActionResult SafeAction(Func<IActionResult> action)
         {
             try
@@ -271,8 +140,3 @@ namespace APIDesafioWarren.Controllers
         }
     }
 }
-
-
-
-
-
