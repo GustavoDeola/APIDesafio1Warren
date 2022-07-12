@@ -20,11 +20,6 @@ builder.Services
         options.RegisterValidatorsFromAssembly(assemblies.First());
     });
 
-builder.Services.AddDbContext<Context>(options => 
-        options.UseMySql(builder.Configuration.GetConnectionString("dbAPIWarren"), 
-        ServerVersion.Parse("8.0.29-mysql"),
-        b => b.MigrationsAssembly("Infrastructure.Data")));
-
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSingleton<ICustomerServices, CustomerServices>();
