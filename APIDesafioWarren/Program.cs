@@ -6,9 +6,6 @@ using System.Reflection;
 using System.Linq;
 using Application;
 using Domain.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Infrastructure.Data.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
