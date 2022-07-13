@@ -1,0 +1,19 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql1
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: warrenbanco1224
+      MYSQL_DATABASE: dbAPIWarren
+    ports:
+      - 3307:3306
+    volumes:
+      - mysqldrive:/var/lib/mysql
+      - //etc/localtime:/etc/localtime:ro # Windows WSL
+      - //etc/timezone:/etc/timezone:ro # Windows WSL
+    healthcheck:
+      test: "/etc/init.d/mysql status"
+      interval: 1s
+      retries: 120
