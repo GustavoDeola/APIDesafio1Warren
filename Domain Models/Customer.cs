@@ -25,7 +25,7 @@ namespace Domain.Models
             Cellphone = cellphone;
             Birthdate = birthdate;
             EmailSms = emailSms;
-            Whatsapp = whatsapp;
+            WhatsApp = whatsapp;
             Country = country;
             City = city;
             PostalCode = postalcode;
@@ -41,7 +41,7 @@ namespace Domain.Models
         public string Cellphone { get; set; }
         public DateTime Birthdate { get; set; }
         public bool EmailSms { get; set; }
-        public bool Whatsapp { get; set; }
+        public bool WhatsApp { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
         public string PostalCode { get; set; }
