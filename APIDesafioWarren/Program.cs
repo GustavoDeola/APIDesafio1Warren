@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
-using System.Linq;
 using Application;
 using Domain.Services;
 using Microsoft.Extensions.Configuration;
