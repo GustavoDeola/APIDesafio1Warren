@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infraestructure.Data.Mappings
+namespace Infrastructure.Data.Mappings
 {
     public class CustomerMapping : IEntityTypeConfiguration<Customer>
     {
@@ -13,7 +13,7 @@ namespace Infraestructure.Data.Mappings
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("Id");
 
             builder.Property(x => x.FullName)
