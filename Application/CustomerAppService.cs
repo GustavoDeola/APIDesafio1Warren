@@ -20,13 +20,13 @@ namespace Application
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public IEnumerable<CustomerResponse> GetAll(Predicate<Customer> predicate = null)
+        public IEnumerable<CustomerResponse> GetAll(Func<Customer, bool> predicate = null)
         {
             var customers = _customerService.GetAll(predicate);
             return _mapper.Map<IEnumerable<CustomerResponse>>(customers);
         }
 
-        public CustomerResponse GetBy(Predicate<Customer> predicate)
+        public CustomerResponse GetBy(Func<Customer, bool> predicate)
         {
             var customer = _customerService.GetBy(predicate);
             var result = _mapper.Map<CustomerResponse>(customer);
