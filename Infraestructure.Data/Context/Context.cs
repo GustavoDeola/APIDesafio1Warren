@@ -1,8 +1,8 @@
 ﻿using Domain.Models;
-using Infraestructure.Data.Mappings;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
-namespace Infraestructure.Data.Context
+namespace Infrastructure.Data
 {
     public class Context : DbContext
     {
@@ -10,7 +10,7 @@ namespace Infraestructure.Data.Context
         { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new CustomerMapping());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.Load("Infrastructure.Data"));
         }
 
         public DbSet<Customer> Customers { get; set; }
