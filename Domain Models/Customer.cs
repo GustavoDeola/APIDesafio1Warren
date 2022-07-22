@@ -4,6 +4,7 @@ namespace Domain.Models
 {
     public class Customer
     {
+        public Customer(){ }
         public Customer(
             string fullname,
             string email,
