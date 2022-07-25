@@ -3,25 +3,32 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
-using System.Linq;
 using Application;
 using Domain.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
+using Infrastructure.Data;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);   
 
-var assemblies = new[] { Assembly.Load("Application") };
+var assembly = Assembly.Load("Application");
 builder.Services
     .AddControllers()
     .AddFluentValidation(options =>
     {
-        options.RegisterValidatorsFromAssembly(assemblies.First());
+        options.RegisterValidatorsFromAssembly(assembly);
     });
+
+builder.Services.AddDbContext<Context>(options =>
+        options.UseMySql(builder.Configuration.GetConnectionString("Default"),
+                        ServerVersion.Parse("8.0.29-mysql"),
+                        b => b.MigrationsAssembly("Infrastructure.Data")));
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSingleton<ICustomerServices, CustomerServices>();
+builder.Services.AddTransient<ICustomerServices, CustomerServices>();
 builder.Services.AddTransient<ICustomerAppService, CustomerAppService>();
-builder.Services.AddAutoMapper((_, mapperConfiguration) => mapperConfiguration.AddMaps(assemblies), assemblies);
+builder.Services.AddAutoMapper((_, mapperConfiguration) => mapperConfiguration.AddMaps(assembly), assembly);
 
 var app = builder.Build();
 

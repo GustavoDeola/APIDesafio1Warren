@@ -54,7 +54,7 @@ namespace APIDesafioWarren.Controllers
                     .GetAll(c => c.FullName == fullName);
 
                 return customer.Count() is 0
-                    ? NotFound("Customer not found!")
+                    ? NotFound($"Customer not found for this FullName: {fullName}")
                     : Ok(customer);
             });
         }
@@ -68,7 +68,7 @@ namespace APIDesafioWarren.Controllers
                         .GetAll(c => c.Email == email);
 
                 return customer.Count() is 0
-                    ? NotFound("Customer not found!")
+                    ? NotFound($"Customer not found for this email: {email}")
                     : Ok(customer);
             });
         }
@@ -82,7 +82,7 @@ namespace APIDesafioWarren.Controllers
                     .GetBy(c => c.Cpf.Equals(cpf));
 
                 return customer is null
-                    ? NotFound("Customer not found!")
+                    ? NotFound($"Customer not found for this cpf: {cpf}")
                     : Ok(customer);
             });
         }
