@@ -1,5 +1,6 @@
 ﻿
 using Domain.Models;
+using EntityFrameworkCore.UnitOfWork.Interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,17 +12,31 @@ namespace Domain.Services
     public class CustomerServices : ICustomerServices
     {
         private readonly Context _context;
-        public CustomerServices(Context context)
+
+        private readonly IUnitOfWork _unitOfWork;
+
+        private readonly IRepositoryFactory _repositoryFactory;
+        public CustomerServices(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _repositoryFactory = repositoryFactory ?? throw new ArgumentNullException(nameof(repositoryFactory));
         }
 
         public IEnumerable<Customer> GetAll(Func<Customer, bool> predicate = null)
         {
-            if (predicate is null) return _context.Customers;
+            var repository = _repositoryFactory.Repository<Customer>();
+
+            var query = repository.MultipleResultQuery();
+
+            var result = repository.Search(query);
+
+            return result;
+
+            /*if (predicate is null) return _context.Customers;
 
             var customers = _context.Customers.Where(predicate);
             return customers;
+            */
         }
 
         public Customer GetBy(Func<Customer, bool> predicate)
