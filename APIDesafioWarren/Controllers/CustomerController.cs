@@ -51,7 +51,7 @@ namespace APIDesafioWarren.Controllers
             return SafeAction(() =>
             {
                 var customer = _customerAppService
-                    .GetAll(c => c.FullName == fullName);
+                    .GetAll(c => c.FullName.Contains(fullName));
 
                 return customer.Count() is 0
                     ? NotFound($"Customer not found for this FullName: {fullName}")
@@ -65,9 +65,9 @@ namespace APIDesafioWarren.Controllers
             return SafeAction(() =>
             {
                 var customer = _customerAppService
-                        .GetAll(c => c.Email == email);
+                        .GetBy(c => c.Email.Equals(email));
 
-                return customer.Count() is 0
+                return customer is null
                     ? NotFound($"Customer not found for this email: {email}")
                     : Ok(customer);
             });
