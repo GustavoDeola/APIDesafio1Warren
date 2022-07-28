@@ -30,7 +30,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddTransient<ICustomerServices, CustomerServices>();
 builder.Services.AddTransient<ICustomerAppService, CustomerAppService>();
 builder.Services.AddTransient<DbContext, Context>();
-builder.Services.AddUnitOfWork(ServiceLifetime.Transient);
+builder.Services.AddUnitOfWork<Context>();
 builder.Services.AddAutoMapper((_, mapperConfiguration) => mapperConfiguration.AddMaps(assembly), assembly);
 
 var app = builder.Build();
