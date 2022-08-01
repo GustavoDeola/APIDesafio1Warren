@@ -13,6 +13,6 @@ namespace Domain.Services
         public int Add(Customer customer);
         public bool Update(Customer customerToUpdate);
         public bool Remove(int id);
-        Customer GetBy(params Expression<Func<Customer, bool>>[] predicate);
+        Customer GetBy(Expression<Func<Customer, bool>> predicate);
     }
 }

@@ -25,36 +25,20 @@ namespace Domain.Services
         {
             var repository = _repositoryFactory.Repository<Customer>();
 
-            var query = repository.MultipleResultQuery();
-                    
+            var query = repository.MultipleResultQuery()
+                                  .AndFilter(predicate);
 
-            var result = repository.Search(query);
-
-            return result;
+            return repository.Search(query);
         }
 
-        public Customer GetBy(params Expression<Func<Customer, bool>>[] predicate)
+        public Customer GetBy(Expression<Func<Customer, bool>> predicate)
         {
             var repository = _repositoryFactory.Repository<Customer>();
 
-            var query = repository.SingleResultQuery();
-                                  //.AndFilter(predicate);
-
-            //var result = repository.FirstOrDefault(query);
-
-
-           // return result;
-            
-            foreach (var item in predicate)
-            {
-                query.AndFilter(item);
-            }
+            var query = repository.SingleResultQuery()
+                                  .AndFilter(predicate);
 
             return repository.FirstOrDefault(query);
-            
-            /*var customer = _context.Customers.AsNoTracking().FirstOrDefault(predicate);
-            return customer;
-            */
         }
 
         public int Add(Customer customer)
