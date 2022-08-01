@@ -45,7 +45,7 @@ namespace APIDesafioWarren.Controllers
             });
         }
 
-        [HttpGet("full-name/{fullname}")]
+        [HttpGet("full-name/{fullName}")]
         public IActionResult GetByFullName(string fullName)
         {
             return SafeAction(() =>
