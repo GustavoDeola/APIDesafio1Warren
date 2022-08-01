@@ -14,6 +14,6 @@ namespace Application
         public int Add(CreateCustomerRequest createCustomerRequest);
         public bool Update(int id, UpdateCustomerRequest updateCustomerRequest);
         public bool Remove(int id);
-        CustomerResponse GetBy(params Expression<Func<Customer, bool>>[] predicate);
+        CustomerResponse GetBy(Expression<Func<Customer, bool>> predicate);
     }
 }

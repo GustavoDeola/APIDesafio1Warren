@@ -27,7 +27,7 @@ namespace Application
             return _mapper.Map<IEnumerable<CustomerResponse>>(customers);
         }
 
-        public CustomerResponse GetBy(params Expression<Func<Customer, bool>>[] predicate)
+        public CustomerResponse GetBy(Expression<Func<Customer, bool>> predicate)
         {
             var customer = _customerService.GetBy(predicate);
             var result = _mapper.Map<CustomerResponse>(customer);
