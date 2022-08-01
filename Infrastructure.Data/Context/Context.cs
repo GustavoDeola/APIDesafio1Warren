@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using EntityFrameworkCore.AutoHistory.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -19,7 +20,15 @@ namespace Infrastructure.Data
 
         public override int SaveChanges()
         {
-            return base.SaveChanges();
+            var addedEntities = this.DetectChanges(EntityState.Added);
+
+            this.EnsureAutoHistory();
+            var affectedRows = base.SaveChanges();
+
+            this.EnsureAutoHistory(addedEntities);
+            affectedRows += base.SaveChanges();
+
+            return affectedRows;
         }
         public DbSet<Customer> Customers { get; set; }
     }
