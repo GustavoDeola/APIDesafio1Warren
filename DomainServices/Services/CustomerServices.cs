@@ -64,11 +64,9 @@ namespace Domain.Services
 
         public bool Remove(int id)
         {
-            var customer = GetBy(c => c.Id == id);
             var repository = _unitOfWork.Repository<Customer>();
             
             return repository.Remove(x => x.Id.Equals(id)) > 0;
-            _unitOfWork.SaveChanges();
 
             return true;
         }
