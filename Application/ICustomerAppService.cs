@@ -4,15 +4,16 @@ using Application.Models.Response;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace Application
 {
     public interface ICustomerAppService
     {
-        IEnumerable<CustomerResponse> GetAll(Func<Customer, bool> predicate = null);
+        IEnumerable<CustomerResponse> GetAll(Expression<Func<Customer, bool>> predicate = null);
         public int Add(CreateCustomerRequest createCustomerRequest);
         public bool Update(int id, UpdateCustomerRequest updateCustomerRequest);
         public bool Remove(int id);
-        CustomerResponse GetBy(Func<Customer, bool> predicate);
+        CustomerResponse GetBy(Expression<Func<Customer, bool>> predicate);
     }
 }
