@@ -1,5 +1,4 @@
-﻿
-using Domain.Models;
+﻿using Domain.Models;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
 using Infrastructure.Data;
 using System;
@@ -11,8 +10,8 @@ namespace Domain.Services
     public class CustomerServices : ICustomerServices
     {
         private readonly IUnitOfWork _unitOfWork;
-
         private readonly IRepositoryFactory _repositoryFactory;
+
         public CustomerServices(IUnitOfWork<Context> unitOfWork, IRepositoryFactory<Context> repositoryFactory)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
@@ -40,7 +39,7 @@ namespace Domain.Services
         }
 
         public int Add(Customer customer)
-        { 
+        {
             if (AnyCustomerForCpf(customer)) return -1;
 
             var repository = _unitOfWork.Repository<Customer>();
@@ -54,8 +53,9 @@ namespace Domain.Services
         public bool Update(Customer customerToUpdate)
         {
             var findCustomers = GetBy(c => c.Id == customerToUpdate.Id);
-            var repository = _unitOfWork.Repository<Customer>();
             if (findCustomers is null && AnyCustomerForCpf(customerToUpdate)) return false;
+            
+            var repository = _unitOfWork.Repository<Customer>();
 
             repository.Update(customerToUpdate);
             _unitOfWork.SaveChanges();
@@ -66,9 +66,8 @@ namespace Domain.Services
         {
             var customer = GetBy(c => c.Id == id);
             var repository = _unitOfWork.Repository<Customer>();
-            if (customer == null) return false;
-
-            repository.Remove(customer);
+            
+            return repository.Remove(x => x.Id.Equals(id)) > 0;
             _unitOfWork.SaveChanges();
 
             return true;
@@ -76,7 +75,7 @@ namespace Domain.Services
 
         private bool AnyCustomerForCpf(Customer customer)
         {
-            var repository = _unitOfWork.Repository<Customer>();
+            var repository = _repositoryFactory.Repository<Customer>();
             return repository.Any(c => c.Cpf == customer.Cpf);
         } 
     }
