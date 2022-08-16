@@ -4,15 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Models
+namespace Application.Models.Response
 {
-    public class CustomerBankInfo
+    public class CustomerBankInfoResponse
     {
-        public int Id { get; set; } 
         public string Account { get; set; }
         public decimal AccountBalance { get; set; }
-
-        public int CustomerId { get; set; } 
-        public Customer Customer { get; set; }
     }
 }

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Data;
 using EntityFrameworkCore.UnitOfWork.Extensions;
+using Domain.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);   
 
@@ -29,6 +30,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddTransient<ICustomerServices, CustomerServices>();
 builder.Services.AddTransient<ICustomerAppService, CustomerAppService>();
+builder.Services.AddTransient<ICustomerBankInfoServices, CustomerBankInfoServices>();
+builder.Services.AddTransient<ICustomerBankInfoAppService, CustomerBankInfoAppService>();
 builder.Services.AddTransient<DbContext, Context>();
 builder.Services.AddUnitOfWork<Context>();
 builder.Services.AddAutoMapper((_, mapperConfiguration) => mapperConfiguration.AddMaps(assembly), assembly);
